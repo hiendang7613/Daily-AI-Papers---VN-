@@ -1,6 +1,4 @@
 1.  **TOPIC_TREE**
-
-    ```
     *   I. Mô hình Ngôn ngữ Lớn (LLMs) & Xử lý Ngôn ngữ Tự nhiên (NLP)
         *   A. Tiền huấn luyện (Pre-training) & Quản lý Dữ liệu (Data Curation)
             *   1. Chiến lược Xây dựng Tập dữ liệu Quy mô Lớn
