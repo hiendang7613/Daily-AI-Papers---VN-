@@ -1,6 +1,4 @@
 1.  **TOPIC_TREE**
-
-    ```markdown
     *   **Large Language Models (LLMs)**
         *   **Core Model Development & Architectures**
             *   **Foundation Model Engineering & Scaling:** 2412.15115 | Hệ thống hóa kiến thức xây dựng và huấn luyện dòng LLM Qwen2.5, tập trung vào quy mô dữ liệu và các giai đoạn huấn luyện.
