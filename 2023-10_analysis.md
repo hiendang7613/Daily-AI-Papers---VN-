@@ -1,312 +1,478 @@
-Tuyệt vời! Tôi đã sẵn sàng để phân tích, tổng hợp và đề xuất ý tưởng nghiên cứu từ bộ abstracts tháng 2023-10.
+ hypernetwork có điều kiện văn bản và activation, dùng NeRF distillation.
 
-**ĐẦU RA**
+Single-Image 3D Reconstruction
 
-1.  **TOPIC_TREE**
+2310.15008 | Wonder3D là mô hình khuếch tán chéo miền đa quan điểm tạo đồng thời bản đồ pháp tuyến và ảnh màu từ ảnh đơn, với domain switcher và geometry-aware normal fusion.
 
-    *   Natural Language Processing (NLP)
-        *   Large Language Models (LLMs) - General Capabilities & Architectures
-            *   Efficient LLM Architectures & Training
-                *   Quantization & Low-Precision
-                    *   2310.11453 | BitNet giới thiệu kiến trúc Transformer 1-bit huấn luyện từ đầu, tập trung vào hiệu quả tính toán và bộ nhớ.
-                    *   2310.18313 | Khung FP8 mixed-precision tự động cho huấn luyện LLM, tối ưu hóa bộ nhớ và giao tiếp.
-                    *   2310.16836 | Đề xuất phương pháp lượng tử hóa floating-point 4-bit cho trọng số và kích hoạt, xử lý outlier bằng pre-shifted exponent bias.
-                    *   2310.19102 | Atom giới thiệu lượng tử hóa 4-bit cho LLM serving, kết hợp mixed-precision và channel reordering, tối ưu bằng custom CUDA kernels.
-                *   Sparsity & Pruning
-                    *   2310.17157 | DEJAVU giới thiệu contextual sparsity động cho LLM inference, sử dụng predictor bất đồng bộ và sparse kernels để tăng tốc.
-                    *   2310.18356 | LoRAShear đề xuất thuật toán pruning cấu trúc cho LLM gắn LoRA, kết hợp phân tích đồ thị phụ thuộc và phục hồi kiến thức động.
-                    *   2310.10837 | Khung thống nhất xấp xỉ MLP hai lớp trong Transformer (Top-K, PKM, σ-MoE) với regularization và khởi tạo cải tiến.
-                *   Context Window Extension & Positional Encoding
-                    *   2310.16450 | CLEX đề xuất mở rộng Position Embedding liên tục qua Neural ODE, cho phép "train on short, test on long".
-            *   LLM Fine-tuning & Adaptation
-                *   Parameter-Efficient Fine-Tuning (PEFT)
-                    *   2310.11454 | VeRA giới thiệu phương pháp finetuning hiệu quả bằng ma trận ngẫu nhiên đóng băng và vector scaling có thể học, giảm mạnh tham số so với LoRA.
-                    *   2310.08659 | LoftQ đề xuất phương pháp lượng tử hóa kết hợp khởi tạo low-rank-aware cho LoRA, tối ưu đồng thời trọng số lượng tử và adapters.
-                *   Instruction Tuning, Alignment & Self-Improvement
-                    *   2310.11511 | SELF-RAG giới thiệu LLM tự chủ động truy vấn, sinh văn bản và tự đánh giá qua reflection tokens.
-                    *   2310.12823 | AgentTuning đề xuất instruction-tuning lai ghép dữ liệu agent và general để tăng khả năng agent mà vẫn giữ năng lực chung.
-                    *   2310.00898 | PIT giới thiệu khung tự cải tiến ngầm cho LLM từ dữ liệu ưa thích, không cần rubric, qua reward gap và curriculum RL.
-                    *   2310.13522 | TRIPOST đề xuất quy trình huấn luyện lặp để LM nhỏ tự cải thiện qua tương tác, xử lý dữ liệu và weighted SL.
-                    *   2310.13385 | Tuna giới thiệu phương pháp ranking (probabilistic & contextual) để fine-tune LLM ưu tiên phản hồi chất lượng cao.
-                    *   2310.19019 | TeacherLM phát triển dòng mô hình instruction-tuned có khả năng sinh giải thích cấu trúc (fundamentals, CoT, common mistakes).
-                *   Domain-Specific Adaptation & Data Augmentation
-                    *   2310.10631 | LLEMMA tiếp tục huấn luyện Code Llama trên Proof-Pile-2 (văn bản, web toán, mã toán) cho mathematical reasoning.
-                    *   2310.09263 | Table-GPT đề xuất "table-tuning" để LLM hiểu và xử lý bảng biểu tốt hơn qua instruction tuning với dữ liệu bảng.
-                    *   2310.10638 | In-Context Pretraining sắp xếp tài liệu liên quan theo chuỗi (qua Contriever và TSP-greedy) để huấn luyện LM đọc và lý luận qua ranh giới tài liệu.
-                    *   2310.13671 | S3 (Synthesis Step by Step) là khung tổng hợp dữ liệu lặp có hướng dẫn từ lỗi của mô hình nhỏ để cải thiện dataset.
-                    *   2310.17784 | FLLM sử dụng multitask prompt-based finetuning và Abductive Augmentation Reasoning (AAR) cho dữ liệu tài chính.
-                    *   2310.06830 | Lemur đề xuất continuation pre-training tập trung vào code và instruction fine-tuning hỗn hợp để cân bằng năng lực ngôn ngữ và lập trình.
-            *   Reasoning, Planning & Agent Capabilities
-                *   Prompting Strategies for Reasoning
-                    *   2310.03051 | FaR (Foresee and Reflect) là khung prompting zero-shot hai bước cho LLM để suy luận Theory-of-Mind và ra quyết định hành động.
-                    *   2310.01714 | Analogical Prompting đề xuất LLM tự sinh ví dụ minh họa liên quan trước khi giải bài toán, không cần dữ liệu chú thích.
-                *   LLM-driven Agents & Tool Use
-                    *   2310.12945 | 3D-GPT là framework không cần huấn luyện, dùng LLM đa tác nhân để sinh mã Python điều khiển Blender tạo cảnh 3D.
-                    *   2310.08740 | Đại lý zero-shot cho điều khiển máy tính với compact screen representation, staged plan-and-follow và structured thought management.
-                    *   2310.17796 | ControlLLM sử dụng đồ thị công cụ (ToG) và DFS search để LLM điều phối và thực thi chuỗi công cụ phức tạp.
-                    *   2310.13227 | ToolChain* đề xuất thuật toán tìm kiếm cây A* cho LLM điều hướng không gian hành động, kết hợp long-term memory và self-consistency.
-                    *   2310.08992 | CodeChain là khung inference modular cho LLM tự sửa đổi mã qua clustering và tái sử dụng sub-modules.
-                *   Mechanistic Interpretability & Self-Correction
-                    *   2310.15916 | Phân tách quá trình ICL thành học thuật (task vector) và ứng dụng, cho phép patching task vector vào các layer sau.
-                    *   2310.01798 | Phân tích và chứng minh LLM hiện tại thất bại trong tự sửa lỗi nội tại cho bài toán suy luận, thường làm giảm hiệu suất.
-            *   Evaluation, Benchmarking & Safety
-                *   LLM Evaluation & Judging
-                    *   2310.08491 | PROMETHEUS là LLM 13B mở nguồn chuyên đánh giá fine-grained dựa trên user-defined rubrics, huấn luyện trên FEEDBACK COLLECTION.
-                    *   2310.17631 | JudgeLM là quy trình fine-tuning LLM làm giám khảo đánh giá cặp câu trả lời, giải quyết các loại bias (position, knowledge, format).
-                *   Safety & Alignment
-                    *   2310.12773 | Safe RLHF tích hợp Safe RL (CMDP, Lagrangian dual) vào RLHF, tối ưu đồng thời hữu ích và vô hại qua hai reward/cost model riêng biệt.
-                    *   2310.03716 | Phân tích thiên vị độ dài trong RLHF, cho thấy phần lớn cải thiện từ PPO là do tăng độ dài, đề xuất các can thiệp.
-                *   Specialized Benchmarks
-                    *   2310.01557 | SmartPlay benchmark đánh giá LLM agents trên 6 trò chơi tương tác, đo 9 năng lực cốt lõi.
-                    *   2310.08678 | Đánh giá khả năng suy luận tài chính của ChatGPT/GPT-4 trên câu hỏi thi CFA, so sánh ZS, CoT, FS prompting.
-                    *   2310.17750 | Khung tự động hóa đo lường tác hại RAI cho LLM, sử dụng LLM mô phỏng người dùng và LLM đánh giá.
-            *   Specialized Applications
-                *   Mathematical Reasoning
-                    *   2310.03731 | MathCodeInstruct giới thiệu dataset LCE (Language-Code-Execution) và fine-tuning LLM để tích hợp thực thi mã thời gian thực cho suy luận toán.
-                *   Retrieval-Augmented Generation (RAG)
-                    *   2310.03214 | FRESH PROMPT là phương pháp few-shot ICL tích hợp chứng cứ từ search engine vào prompt để cải thiện độ chính xác LLM.
-                *   Decoding Strategies
-                    *   2310.17022 | Controlled Decoding (CD) phân tách base LM và prefix scorer, giải bài toán KL-regularized tokenwise RL, hỗ trợ multi-objective.
-                    *   2310.09139 | CONSENSUS GAME đề xuất giải mã ngôn ngữ kết hợp generative và discriminative qua trò chơi tín hiệu điều chuẩn hóa và no-regret learning.
-                    *   2310.09520 | Reward-Augmented Decoding (RAD) sử dụng reward model unidirectional và caching để điều khiển sinh văn bản, tăng xác suất token có reward cao.
-                *   Data Distillation
-                    *   2310.09983 | FARZI đề xuất chưng cất dữ liệu tự hồi quy thành tóm tắt ẩn low-rank, sử dụng thuật toán đạo hàm ngược hiệu quả cho Adam.
-        *   Foundation Model Programming
-            *   2310.03714 | DSPy giới thiệu programming model trừu tượng hóa pipeline LM thành graph với module khai báo, signature tự nhiên và compiler tối ưu.
-        *   Privacy & Security
-            *   2310.16789 | WIKIMIA là benchmark động tự động phát hiện dữ liệu tiền huấn luyện, MIN-K% PROB là phương pháp MIA tham chiếu tự do.
-        *   Model Scaling & Emulation
-            *   2310.12962 | Emulated Fine-Tuning (EFT) phân tách quy mô tiền huấn luyện và tinh chỉnh, cho phép up-scaling và điều chỉnh hành vi test-time.
-    *   Computer Vision (CV)
-        *   Image Generation & Synthesis
-            *   Diffusion Models - General
-                *   Efficient Training & Data-Centric Methods
-                    *   2310.00426 | PIXART-α đề xuất chiến lược huấn luyện 3 giai đoạn, T2I Transformer hiệu quả và quy trình tạo dữ liệu giàu thông tin (SAM-LLaVA).
-                    *   2310.16656 | RECAP sử dụng mô hình caption tự động (PaLI tinh chỉnh) để tái chú thích dữ liệu T2I, cải thiện chất lượng sinh ảnh của Stable Diffusion.
-                    *   2310.16825 | CommonCanvas giới thiệu "Telephoning" (BLIP-2 tạo chú thích tổng hợp cho ảnh CC) và công thức huấn luyện LDM tiết kiệm dữ liệu.
-                *   High-Resolution & Multi-Resolution
-                    *   2310.15111 | MDM giới thiệu khuếch tán đa độ phân giải trong không gian ẩn mở rộng và kiến trúc NestedUNet, huấn luyện progressive.
-                *   Fast Sampling & Distillation
-                    *   2310.01407 | CoDi chưng cất trực tiếp mô hình khuếch tán có điều kiện từ LDM tiền huấn luyện không cần dữ liệu gốc, sử dụng tính nhất quán PF-ODE.
-                    *   2310.13268 | DPM-Solver-v3 giới thiệu bộ giải ODE đa bậc với empirical model statistics (EMS) và parameterization tổng quát cho DPMs.
-                *   Controlled & Conditional Generation
-                    *   2310.03502 | Kandinsky giới thiệu kiến trúc latent diffusion kết hợp image prior (diffusion transformer-encoder) và MoVQ autoencoder cho T2I.
-                    *   2310.19784 | CustomNet tích hợp Zero-1-to-3 cho tùy biến đối tượng zero-shot, điều khiển vị trí và nền qua dual cross-attention.
-                    *   2310.08579 | HyperHuman giới thiệu Latent Structural Diffusion Model (RGB, depth, normal) và Structure-Guided Refiner cho sinh ảnh người có điều khiển.
-            *   Evaluation & Benchmarking
-                *   2310.01596 | ImagenHub là framework chuẩn hóa dataset, inference và human evaluation cho 7 tác vụ conditional image generation.
-                *   2310.15144 | DEsignBench là benchmark T2I tập trung vào thiết kế thị giác, đề xuất đánh giá tự động bằng GPT-4V.
-            *   Agent-based Prompt Refinement
-                *   2310.08541 | Idea2Img là framework đa mô-đun dùng GPT-4V tự tinh chỉnh lặp đi lặp lại prompt cho mô hình T2I bất kỳ.
-        *   Video Generation & Synthesis
-            *   Diffusion Models for Video
-                *   2310.19512 | VideoCrafter mở rộng SD UNet thành spatio-temporal 3D U-Net, phát triển nhánh I2V với Text-Aligned Rich Image Embedding.
-                *   2310.15169 | FreeNoise đề xuất phương pháp tuning-free cho inference video diffusion dài hơn, với Local Noise Shuffle và Window-based Attention Fusion.
-                *   2310.08465 | MotionDirector đề xuất Dual-Path LoRAs và appearance-debiased temporal loss để tách biệt học xuất hiện và chuyển động trong video diffusion.
-            *   Evaluation & Benchmarking
-                *   2310.11440 | EvalCrafter là pipeline benchmark T2V, giới thiệu SD-Score, 17 metrics đa khía cạnh và human-alignment.
-        *   3D Content Creation & Understanding
-            *   Text-to-3D Generation
-                *   Diffusion-based Methods
-                    *   2310.16818 | DreamCraft3D kết hợp diffusion prior 3D (Zero-1-to-3) và 2D (SDS) với progressive view training và bootstrapped score distillation.
-                    *   2310.08529 | GaussianDreamer kết hợp diffusion 3D và 2D qua 3D Gaussian Splatting, với noisy point growing và color perturbation.
-                    *   2310.11784 | Progressive3D phân tách tạo 3D từ prompt phức tạp thành chuỗi chỉnh sửa cục bộ, với OSCS để tách semantic trùng lặp.
-                *   NeRF-based Methods
-                    *   2310.17075 | HyperFields dự đoán trọng số NeRF theo trình tự lớp bằng dynamic hypernetwork, chưng cất kiến thức từ nhiều NeRF.
-            *   Single-Image 3D Reconstruction
-                *   2310.15008 | Wonder3D giới thiệu mô hình khuếch tán chéo miền đa quan điểm tạo đồng thời bản đồ pháp tuyến và ảnh màu từ ảnh đơn, với geometry-aware normal fusion.
-            *   Dynamic View Synthesis & Rendering
-                *   2310.11448 | 4K4D giới thiệu đại diện điểm đám mây 4D, mô hình ngoại thất hybrid và differentiable depth peeling cho render real-time.
-            *   Mesh Texturing & Stylization
-                *   2310.13119 | DreamSpace là khung texturing lưới cảnh panoramic top-down, sinh texture 360° từ điểm nhìn trung tâm, với dual texture alignment.
-        *   Image Classification & Understanding
-            *   Few-Shot & In-Context Learning
-                *   2310.10971 | CAML tái định nghĩa n-way k-shot image classification thành non-causal sequence modeling, dùng ELMES class encoder.
-            *   Large-Scale Pre-training & Architecture Comparison
-                *   2310.16764 | Đánh giá khả năng mở rộng của NFNet (ConvNet) trên JFT-4B, cho thấy hiệu suất tương đương ViT với cùng budget tính toán.
-        *   Vision Foundation Model Fusion
-            *   2310.15308 | SAM-CLIP trộn SAM và CLIP qua multi-task distillation và continual learning, phát sinh khả năng zero-shot semantic segmentation.
-    *   Multimodal Learning
-        *   Vision-Language Models (VLMs)
-            *   VLM Architectures & Pretraining
-                *   2310.03744 | Giới thiệu Response Format Prompting, MLP Cross-Modal Connector và pipeline xử lý ảnh độ phân giải cao cho VLM.
-                *   2310.09199 | PaLI-3 tích hợp SigLIP ViT-G/14, huấn luyện đa giai đoạn với curriculum tăng độ phân giải, mở rộng segmentation qua VQ-VAE.
-                *   2310.03734 | ITIT là khung huấn luyện dựa trên cycle consistency (T2I2T, I2T2I) để tận dụng dữ liệu hình ảnh-văn bản không cặp đôi.
-            *   VLM Instruction Tuning & Applications
-                *   2310.09478 | MiniGPT-v2 sử dụng token định danh tác vụ, ghép token hình ảnh và huấn luyện 3 giai đoạn cho VLM đa năng.
-            *   Visual Grounding & Referring Expression
-                *   2310.11441 | Set-of-Mark (SoM) Prompting kích hoạt khả năng grounding của GPT-4V bằng phân đoạn ảnh và gán dấu "speakable".
-            *   Hallucination Mitigation & Evaluation
-                *   2310.16045 | Woodpecker là framework hậu xử lý khử ảo giác MLLM không cần huấn luyện lại, sử dụng visual knowledge base và sửa lỗi tự động.
-                *   2310.14566 | HALLUSION BENCH là benchmark chẩn đoán lỗi hallucination ngôn ngữ và illusion thị giác trong LVLM, với control pairs và đánh giá GPT-4-assisted.
-            *   VLM Evaluation
-                *   2310.16534 | Đánh giá định lượng khả năng của GPT-4V trên nhiều tác vụ thị giác-ngôn ngữ, phân tích hành vi từ chối và hạn chế.
-                *   2310.19061 | Đánh giá toàn diện khả năng của GPT-4V trong VQA y tế, phân tích hành vi qua 7 khía cạnh.
-        *   Audio-Language Models
-            *   2310.13289 | SALMONN là MLLM tích hợp Whisper và BEATs qua window-level Q-Former, xử lý speech, audio events, music; đề xuất few-shot activation tuning.
-            *   2310.08715 | SUTLM là mô hình ngôn ngữ tự hồi quy chung cho đơn vị lời nói và văn bản, với kỹ thuật mixing CST/AST và metric CRA/PELM.
-        *   Video-Language Understanding
-            *   2310.19773 | MM-VID là hệ thống pipeline 4 mô-đun (pre-processing, knowledge collection, clip description, script generation) dùng GPT-4V/GPT-4 cho hiểu video dài.
-        *   Multimodal Agents & Systems
-            *   2310.11954 | MusicAgent là hệ thống tác nhân tự động dùng LLM phối hợp các công cụ âm nhạc đa nguồn, với chuẩn I/O thống nhất.
-            *   2310.12404 | Loop Copilot tích hợp LLM điều phối và nhiều mô hình AI âm nhạc, sử dụng Global Attribute Table để duy trì trạng thái nhạc.
-    *   Reinforcement Learning (RL)
-        *   RL from Human Feedback (RLHF) & Preference Learning
-            *   2310.13639 | Contrastive Preference Learning (CPL) học chính sách trực tiếp từ phản hồi ưu tiên dựa trên regret, không cần học reward.
-        *   Reward Engineering & Synthesis
-            *   2310.12931 | EUREKA sử dụng LLM (GPT-4) với environment-as-context, evolutionary search và reward reflection để tự động sinh hàm thưởng cho RL.
-            *   2310.12921 | VLM-RM sử dụng VLM tiền huấn luyện (CLIP) làm reward model zero-shot cho RL thị giác, với Goal-Baseline Regularization.
-    *   Embodied AI & Robotics
-        *   Vision-Language Planning & Code Generation
-            *   2310.08588 | Octopus là mô hình lập trình viên thị giác-ngôn ngữ sinh mã Python thực thi tác vụ trong môi trường OctoVerse, huấn luyện bằng RLEF.
-            *   2310.10645 | ITP là khung hai cấp (high-level planner, low-level executor) dùng LLM, vision (Grounded-DINO) và API robot cho replanning động.
-            *   2310.10625 | Video Language Planning (VLP) kết hợp VLM (policy, heuristic) và text-to-video (dynamics model) cho lập kế hoạch video dài hạn trên robot.
-    *   Machine Learning Systems
-        *   Efficient On-Device Training/Fine-tuning
-            *   2310.17752 | PockEngine là framework biên dịch cho fine-tuning hiệu quả và thưa trên thiết bị biên, hiện thực hóa sparse backpropagation.
-        *   Model Routing & Cascades
-            *   2310.12963 | AutoMix sử dụng self-verification dạng entailment và POMDP router để quyết định chuyển truy vấn giữa các LM black-box.
-            *   2310.03094 | LLM cascade dựa trên đo lường độ nhất quán câu trả lời của LLM yếu (qua MoT sampling) để quyết định khi nào gọi LLM mạnh.
-    *   Continual Learning
-        *   2310.16226 | TIC-CLIP giới thiệu benchmark Time-Continual cho CLIP (TIC-DataComp), giao thức streaming continual training và chiến lược replay buffer.
-    *   Other
-        *   2310.10944 | TEQ giới thiệu biến đổi tương đương huấn luyện được cho lượng tử hóa LLM, thêm per-channel scale và fuse vào inference.
-        *   2310.16795 | QMoE triển khai nén dữ liệu phụ thuộc quy mô cho MoE, sử dụng GPTQ mở rộng với offloading và định dạng sub-1-bit.
-        *   2310.12274 | MCPL học đồng thời nhiều prompt concept từ câu-ảnh không cần annotation, dùng Attention Masking và Prompts Contrastive Loss.
+Dynamic View Synthesis & Rendering
 
-2.  **SOTA_HIGHLIGHTS**
+2310.11448 | 4K4D giới thiệu đại diện điểm đám mây 4D, mô hình ngoại thất hybrid và differentiable depth peeling cho render real-time độ phân giải cao.
 
-    | Rank | PaperID   | Keywords (≤ 5)                                       | Đột phá                                                                                                                                                              | Ảnh hưởng                                                                                                                                                                                             |
-    | :--- | :-------- | :--------------------------------------------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-    | 1    | 2310.11453 | 1-bit LLM, BitNet, BitLinear, Training from scratch  | Giới thiệu BitNet, kiến trúc Transformer 1-bit đầu tiên cho LLM được huấn luyện từ đầu, đạt hiệu năng cạnh tranh với FP16 ở cùng quy mô, giảm đáng kể bộ nhớ và năng lượng. | Mở ra hướng đi mới cho LLM siêu hiệu quả, tiềm năng triển khai trên thiết bị tài nguyên hạn chế, thay đổi cách nghĩ về scaling laws và quantization.                                                    |
-    | 2    | 2310.03714 | DSPy, LM Programming, Pipeline Optimization, Signatures | Đề xuất DSPy, một framework lập trình cho LLM trừu tượng hóa pipeline thành các module có thể học và tối ưu hóa tự động (prompt, fine-tuning) thông qua "teleprompters". | Thay đổi cách xây dựng và tối ưu các ứng dụng LLM phức tạp, từ thủ công sang tự động hóa, tăng tính module hóa và hiệu quả.                                                                          |
-    | 3    | 2310.11511 | SELF-RAG, Retrieval, Self-Reflection, Adaptive RAG   | LLM chủ động quyết định khi nào cần truy vấn, tự sinh truy vấn, và tự đánh giá chất lượng thông tin truy vấn cũng như kết quả sinh ra thông qua "reflection tokens".       | Cải thiện đáng kể tính tin cậy và khả năng kiểm soát của RAG, giảm hallucination, làm cho LLM trở nên "có ý thức" hơn về kiến thức của mình.                                                              |
-    | 4    | 2310.16818 | DreamCraft3D, Text-to-3D, Bootstrapped SDS, Hybrid SDS | Kết hợp diffusion prior 3D và 2D, cùng cơ chế bootstrapped score distillation (fine-tune DreamBooth lặp đi lặp lại) để tạo 3D asset chất lượng cao, nhất quán.         | Nâng cao chất lượng và tính nhất quán của mô hình 3D từ văn bản, giải quyết các vấn đề về Janus (multi-face) và tối ưu hóa texture.                                                                     |
-    | 5    | 2310.17157 | DEJAVU, Contextual Sparsity, LLM Inference, Lookahead | Giới thiệu "contextual sparsity" động cho LLM inference, sử dụng predictor bất đồng bộ để kích hoạt chỉ các attention head/neuron cần thiết, tăng tốc GPU thực tế.      | Giải quyết nút thắt cổ chai về tốc độ inference của LLM lớn, cho phép triển khai hiệu quả hơn mà không cần retraining hay giảm chất lượng.                                                                 |
-    | 6    | 2310.12931 | EUREKA, Reward Synthesis, LLM for RL, Evolutionary Search | LLM (GPT-4) tự động sinh và tối ưu hóa hàm thưởng cho các tác vụ RL phức tạp bằng cách sử dụng mã nguồn môi trường làm ngữ cảnh và evolutionary search.                 | Tự động hóa một trong những phần khó khăn nhất của RL (reward engineering), mở ra khả năng giải quyết các bài toán RL mới mà trước đây đòi hỏi chuyên môn sâu.                                             |
-    | 7    | 2310.00704 | UniAudio, Foundation Model, Audio Generation, Multi-scale Transformer | Mô hình LLM nền tảng đầu tiên thống nhất 11 tác vụ tạo âm thanh (speech, music, sound) thành bài toán dự đoán token, sử dụng kiến trúc Transformer đa tỉ lệ.        | Tạo ra một hướng tiếp cận chung cho audio generation, tương tự như cách LLM đã làm cho NLP, thúc đẩy các ứng dụng âm thanh đa năng.                                                                       |
+Video Generation & Synthesis
 
-3.  **NOVEL_TECH_CONTRIBUTIONS**
+Diffusion Models
 
-    *   **2310.11453 – BitLinear Layer & 1-bit Training from Scratch – Suy nghĩ**: Đột phá thực sự khi huấn luyện LLM 1-bit từ đầu mà vẫn giữ được hiệu năng. BitLinear với zero-mean centering, scaling factor và SubLN là chìa khóa. Rất hứa hẹn cho LLM trên edge.
-    *   **2310.11511 – Reflection Tokens (Retrieve, ISREL, ISSUP, ISUSE) – Suy nghĩ**: Cơ chế token đặc biệt để LLM tự kiểm soát truy vấn và tự đánh giá là một ý tưởng rất thông minh, giúp LLM "tự nhận thức" hơn về quá trình RAG.
-    *   **2310.12945 – Multi-agent LLM for 3D Procedural Code Generation – Suy nghĩ**: Sử dụng LLM để sinh code điều khiển công cụ 3D (Blender) thay vì tối ưu neural fields là một hướng đi mới, thực tế và có tính mở rộng cao cho content creation.
-    *   **2310.15916 – Task Vector Patching for ICL Analysis – Suy nghĩ**: Việc tách biệt "học" (tạo task vector) và "áp dụng" trong ICL, sau đó patch vector này vào các layer sau là một cách tiếp cận thú vị để hiểu cơ chế ICL.
-    *   **2310.15111 – NestedUNet for Multi-resolution Diffusion – Suy nghĩ**: Kiến trúc UNet lồng nhau cho phép xử lý đồng thời nhiều độ phân giải trong diffusion model là một giải pháp thanh lịch cho high-resolution generation.
-    *   **2310.11448 – 4K4D Representation (4D point cloud + 4D feature grid) & Differentiable Depth Peeling – Suy nghĩ**: Kết hợp điểm đám mây 4D với lưới đặc trưng và depth peeling khả vi cho phép render real-time chất lượng cao cho cảnh động, rất ấn tượng.
-    *   **2310.03714 – DSPy Programming Model (Signatures, Modules, Teleprompters) – Suy nghĩ**: Trừu tượng hóa pipeline LLM thành các module có thể học và tối ưu tự động là một bước tiến lớn, giúp việc xây dựng ứng dụng LLM trở nên có hệ thống và hiệu quả hơn.
-    *   **2310.18313 – FP8 Precision Decoupling & Automatic Scaling for LLM Training – Suy nghĩ**: Áp dụng FP8 end-to-end (tính toán, lưu trữ, giao tiếp) với các kỹ thuật xử lý under/overflow là một đóng góp quan trọng cho huấn luyện LLM hiệu quả.
-    *   **2310.16818 – Bootstrapped Score Distillation (LBSD) for 3D Generation – Suy nghĩ**: Luân phiên fine-tune DreamBooth trên render đa góc nhìn và tối ưu texture 3D theo hướng dẫn từ prior 3D-aware là một vòng lặp tự cải thiện thông minh cho text-to-3D.
-    *   **2310.11454 – VeRA (Vector-based Random Matrix Adaptation) – Suy nghĩ**: Giảm tham số trainable của LoRA xuống một bậc bằng cách dùng ma trận ngẫu nhiên cố định và vector scaling có thể học là một ý tưởng đơn giản mà hiệu quả.
-    *   **2310.10638 – In-Context Pretraining with TSP-greedy Document Ordering – Suy nghĩ**: Thay đổi cách sắp xếp tài liệu trong pretraining (thay vì ngẫu nhiên) để khuyến khích mô hình học liên kết giữa các tài liệu là một hướng data-centric thú vị.
-    *   **2310.03731 – LCE (Language-Code-Execution) Data & Inference Pipeline – Suy nghĩ**: Tích hợp trực tiếp vòng lặp thực thi mã vào quá trình sinh suy luận của LLM cho các bài toán toán học là một cách tiếp cận mạnh mẽ.
-    *   **2310.12773 – Safe RLHF with CMDP and Lagrangian Dual – Suy nghĩ**: Áp dụng lý thuyết Safe RL vào RLHF để cân bằng động giữa tính hữu ích và vô hại là một bước tiến quan trọng cho an toàn LLM.
-    *   **2310.11441 – Set-of-Mark (SoM) Prompting for GPT-4V Grounding – Suy nghĩ**: Sử dụng các dấu "speakable" (chữ, số) để GPT-4V tự "đọc" và liên kết vùng ảnh với mô tả là một cách khai thác OCR rất sáng tạo.
-    *   **2310.08659 – LoftQ (Low-rank-aware Quantization for LoRA) – Suy nghĩ**: Đồng thời tối ưu trọng số lượng tử hóa và adapter LoRA ngay từ đầu là một cải tiến hợp lý so với QLoRA.
-    *   **2310.16795 – Sub-1-bit MoE Quantization with LZW-like Dictionary – Suy nghĩ**: Nén MoE xuống sub-1-bit với custom dictionary và offloading là một thành tựu kỹ thuật ấn tượng cho mô hình cực lớn.
-    *   **2310.00704 – Multi-scale Transformer for UniAudio – Suy nghĩ**: Kiến trúc Transformer toàn cục-cục bộ để xử lý chuỗi âm thanh dài cho nhiều tác vụ là một giải pháp hiệu quả về tính toán.
-    *   **2310.12931 – EUREKA (Evolutionary Reward Search with LLMs) – Suy nghĩ**: Để LLM tự sinh và tinh chỉnh hàm thưởng dựa trên mã nguồn môi trường và phản hồi từ RL training là một cách tự động hóa reward engineering rất mạnh mẽ.
-    *   **2310.13639 – Contrastive Preference Learning (CPL) – Suy nghĩ**: Học chính sách trực tiếp từ dữ liệu ưu tiên bằng contrastive loss, bỏ qua bước học reward model, là một cách đơn giản hóa RLHF đáng kể.
-    *   **2310.17157 – DEJAVU (Dynamic Contextual Sparsity with Lookahead Predictors) – Suy nghĩ**: Dự đoán và kích hoạt động các head/neuron cần thiết dựa trên ngữ cảnh, với cơ chế lookahead, là một hướng đi rất hứa hẹn để tăng tốc LLM inference.
-    *   **2310.10944 – TEQ (Trainable Equivalent Transformation for Quantization) – Suy nghĩ**: Thêm per-channel scale có thể học và fuse vào inference để cải thiện lượng tử hóa mà không tăng overhead là một kỹ thuật thông minh.
-    *   **2310.09983 – FARZI (Factorized Autoregressive Data Distillation with Reverse-Mode Adam) – Suy nghĩ**: Chưng cất dữ liệu tự hồi quy thành tóm tắt ẩn low-rank và thuật toán đạo hàm ngược hiệu quả cho Adam là một đóng góp sâu sắc cho data distillation.
+2310.19512 | VideoCrafter mở rộng SD UNet thành spatio-temporal 3D U-Net (Spatial & Temporal Transformers, FPS embedder) và nhánh I2V với Text-Aligned Rich Image Embedding.
 
-4.  **GAPS_AND_OPPORTUNITIES**
+2310.08465 | MotionDirector đề xuất Dual-Path LoRAs và appearance-debiased temporal loss để tách biệt học appearance và motion trong video diffusion.
 
-    *   **Efficient LLMs:** Nhu cầu về LLM nhỏ hơn, nhanh hơn, tiết kiệm năng lượng hơn vẫn rất lớn, đặc biệt cho triển khai trên thiết bị biên (BitNet, FP8, VeRA, LoftQ, DEJAVU, QMoE, TEQ là các bước tiến, nhưng vẫn còn không gian). Cơ hội: khám phá các kiến trúc/kỹ thuật lượng tử hóa/sparsity mới, đặc biệt là các phương pháp training-free hoặc very-low-cost fine-tuning.
-    *   **Controllability & Reliability of Generative Models (Text, Image, Video, 3D, Audio):**
-        *   Giảm Hallucination trong LLMs và MLLMs (SELF-RAG, Woodpecker, HALLUSION BENCH). Cơ hội: phát triển các cơ chế self-correction/verification hiệu quả hơn, tích hợp kiến thức bên ngoài một cách linh động và đáng tin cậy.
-        *   Kiểm soát chi tiết (style, content, motion, semantics) trong sinh ảnh/video/3D (PIXART-α, Kandinsky, CustomNet, HyperHuman, VideoCrafter, MotionDirector, DreamCraft3D, Progressive3D). Cơ hội: các phương pháp điều khiển đa thuộc tính, tương tác, và có tính tổng quát cao hơn.
-        *   Đảm bảo tính nhất quán (temporal, view, semantic) trong video và 3D (DreamCraft3D, Wonder3D, FreeNoise). Cơ hội: các mô hình học được sự bất biến và cấu trúc tiềm ẩn của thế giới 3D+thời gian.
-    *   **Data-Centric AI for LLMs/VLMs:**
-        *   Chất lượng và sự đa dạng của dữ liệu huấn luyện/fine-tuning (PIXART-α, RECAP, CommonCanvas, AgentInstruct, TeacherData-2M, S3, In-Context Pretraining, MathCodeInstruct). Cơ hội: các phương pháp tự động tạo/tinh chỉnh dữ liệu chất lượng cao, đặc biệt cho các domain chuyên biệt hoặc low-resource.
-        *   Khai thác dữ liệu không cặp đôi (unpaired data) cho multimodal learning (ITIT). Cơ hội: phát triển các kỹ thuật self-supervised/cycle-consistent mạnh mẽ hơn cho học đa phương thức.
-    *   **Robustness and Generalization of LLM Agents:**
-        *   Khả năng lập kế hoạch, suy luận và sử dụng công cụ trong các môi trường phức tạp, động (3D-GPT, Octopus, ControlLLM, ToolChain\*, EUREKA, ITP). Cơ hội: các agent có khả năng học hỏi từ tương tác, thích ứng với công cụ mới, và xử lý thông tin không chắc chắn.
-        *   Đánh giá năng lực agent một cách toàn diện (SmartPlay). Cơ hội: phát triển các benchmark và metric mới, thách thức hơn cho LLM agents.
-    *   **Multimodal Foundation Models:**
-        *   Tích hợp sâu hơn và hiệu quả hơn giữa các modal (PaLI-3, SALMONN, UniAudio, MiniGPT-v2). Cơ hội: kiến trúc thống nhất thực sự cho nhiều modal, học biểu diễn chung mạnh mẽ, và khả năng zero-shot cross-modal reasoning.
-        *   Hiểu và sinh nội dung dài, phức tạp (MM-VID cho video, VLP cho video planning). Cơ hội: các mô hình có khả năng xử lý context dài và duy trì sự nhất quán trong các tác vụ video/audio/text dài.
-    *   **Interpretability and Mechanistic Understanding:**
-        *   Hiểu rõ hơn cách LLM hoạt động, đặc biệt là ICL và reasoning (Task Vector Patching). Cơ hội: phát triển các công cụ và phương pháp mới để "giải phẫu" LLM.
-    *   **Evaluation of Generative Models:**
-        *   Các benchmark và metric tự động/bán tự động đáng tin cậy hơn, đặc biệt cho các khía cạnh chủ quan như sáng tạo, thẩm mỹ, tính hữu ích (PROMETHEUS, JudgeLM, ImagenHub, DEsignBench, EvalCrafter, HALLUSION BENCH). Cơ hội: các phương pháp đánh giá align tốt hơn với con người, có khả năng giải thích và chẩn đoán lỗi.
-    *   **Safety and Alignment:**
-        *   Phát triển các phương pháp alignment hiệu quả, ít tốn kém và ít bị "gaming" hơn (Safe RLHF, phân tích length bias trong RLHF). Cơ hội: các kỹ thuật alignment không chỉ dựa trên preference data, mà còn tích hợp các nguyên tắc đạo đức hoặc ràng buộc hình thức.
-    *   **Continual Learning for Foundation Models:**
-        *   Khả năng học liên tục kiến thức mới mà không quên kiến thức cũ ở quy mô lớn (TIC-CLIP). Cơ hội: các thuật toán continual learning hiệu quả về bộ nhớ và tính toán cho các foundation model.
-    *   **Programming Models for LLMs:**
-        *   Các công cụ và framework giúp phát triển ứng dụng LLM dễ dàng và hiệu quả hơn (DSPy). Cơ hội: các ngôn ngữ/thư viện bậc cao hơn cho "LLM engineering".
+2310.15169 | FreeNoise đề xuất Local Noise Shuffle Unit và Window-based Attention Fusion cho inference video diffusion dài hơn Ntrain khung hình, không cần tuning.
 
-5.  **FUTURE_IDEAS**
+Evaluation & Benchmarking
 
-    ✨ **Idea 1: Meta-Cognitive RAG (MC-RAG) - Nâng cao SELF-RAG**
-    *   **Motivation**: SELF-RAG (2310.11511) cho phép LLM tự quyết định truy vấn và đánh giá. Tuy nhiên, việc đánh giá và quyết định vẫn dựa trên các token được huấn luyện. Cần một cơ chế "meta-level" để LLM tự điều chỉnh chiến lược truy vấn và ngưỡng đánh giá dựa trên độ phức tạp của câu hỏi hoặc độ tin cậy của kiến thức nội tại.
-    *   **Key novelty**: LLM không chỉ sinh reflection token mà còn sinh "meta-reflection tokens" để điều chỉnh *cách* nó sử dụng reflection tokens (ví dụ: "Increase_Retrieval_Threshold", "Prioritize_Recency_In_Evidence"). Huấn luyện một "meta-critic" nhỏ bên trong LLM để học các chiến lược meta-reflection này.
-    *   **Approach**:
-        1.  Mở rộng SELF-RAG với meta-reflection tokens.
-        2.  Thu thập dữ liệu huấn luyện: cho LLM giải quyết các tác vụ, nếu thất bại hoặc cho kết quả không tối ưu, con người sẽ cung cấp meta-correction (ví dụ: "Lần sau với dạng câu hỏi này, hãy tìm kiếm sâu hơn" → dịch thành meta-reflection token).
-        3.  Fine-tune LLM để học sinh cả reflection và meta-reflection tokens.
-        4.  Trong inference, LLM sử dụng meta-reflection tokens để điều chỉnh động ngưỡng kích hoạt truy vấn, số lượng tài liệu, hoặc trọng số của các tiêu chí đánh giá (ISREL, ISSUP, ISUSE).
-    *   **Dataset + Metrics**: Sử dụng các bộ QA phức tạp (HotpotQA, StrategyQA). Metrics: Accuracy, F1, và các metric mới đo lường "efficiency of reflection" (ví dụ: số lần truy vấn không cần thiết giảm, độ chính xác của self-assessment).
-    *   **Risk/Feasibility**: Cao. Thách thức chính là thu thập dữ liệu meta-correction và thiết kế không gian meta-reflection token hiệu quả. Có thể bắt đầu với một tập meta-reflection token giới hạn.
+2310.11440 | EvalCrafter là pipeline benchmark T2V với quy trình sinh prompt, 17 metrics đa khía cạnh (VQ, text-video consistency, motion, temporal consistency) và human-alignment.
 
-    ✨ **Idea 2: Composable Diffusion Priors for Zero-Shot Complex Scene Generation (Interdisciplinary)**
-    *   **Motivation**: Các mô hình như DreamCraft3D (2310.16818) hay Wonder3D (2310.15008) rất mạnh trong việc tạo 3D asset hoặc scene từ một prompt. Tuy nhiên, việc tạo các cảnh phức tạp với nhiều đối tượng tương tác, mỗi đối tượng có style/thuộc tính riêng, vẫn còn khó khăn.
-    *   **Key novelty**: Phát triển một framework cho phép "ghép" (compose) nhiều diffusion prior (2D, 3D, style-specific, object-specific) một cách linh hoạt trong quá trình sinh ảnh/3D. Sử dụng một LLM (như trong 3D-GPT 2310.12945 hoặc ControlLLM 2310.17796) để phân tích prompt phức tạp thành các sub-component và điều phối việc áp dụng các prior tương ứng lên các vùng/đối tượng cụ thể.
-    *   **Approach**:
-        1.  Xây dựng một thư viện các pre-trained diffusion priors (ví dụ: prior cho "mèo", prior cho "phong cách Van Gogh", prior cho "kim loại", prior cho "hình học khối lập phương").
-        2.  Sử dụng một LLM để:
-            *   Phân tích prompt đầu vào thành các đối tượng, thuộc tính, quan hệ không gian.
-            *   Chọn các diffusion prior phù hợp từ thư viện cho từng thành phần.
-            *   Sinh ra một "composition plan" mô tả cách kết hợp các prior này (ví dụ: áp dụng prior A cho vùng R1, prior B cho đối tượng O2, đảm bảo ràng buộc C giữa R1 và O2).
-        3.  Phát triển một "diffusion composer" module nhận composition plan và các prior, thực hiện quá trình denoising có điều kiện kết hợp, có thể sử dụng kỹ thuật tương tự như dual cross-attention (2310.19784) hoặc attention masking (2310.12274) để cục bộ hóa ảnh hưởng của các prior.
-    *   **Dataset + Metrics**: Không có dataset chuẩn. Tạo benchmark mới với các prompt mô tả cảnh phức tạp. Đánh giá bằng human evaluation (tính nhất quán, độ phức tạp, tuân thủ prompt) và các metric về object detection/segmentation trên ảnh sinh ra.
-    *   **Risk/Feasibility**: Cao. Thách thức lớn nhất là làm sao để các prior khác nhau "hòa trộn" một cách mượt mà và nhất quán, tránh xung đột. LLM điều phối cần khả năng reasoning không gian tốt.
+Meta-Learning & Few-Shot Classification
 
-    ✨ **Idea 3: BitUniverse - Towards 1-bit Multimodal Foundation Models (Moon-shot)**
-    *   **Motivation**: BitNet (2310.11453) cho thấy tiềm năng của LLM 1-bit. UniAudio (2310.00704) và PaLI-3 (2310.09199) hướng tới foundation model cho nhiều modality. Liệu có thể kết hợp hai hướng này?
-    *   **Key novelty**: Phát triển kiến trúc và phương pháp huấn luyện cho một foundation model 1-bit có khả năng xử lý và sinh nhiều modality (text, image, audio, video) từ đầu.
-    *   **Approach**:
-        1.  **Tokenization**: Nghiên cứu các phương pháp universal tokenization (như RVQ trong UniAudio) có thể được binarize hiệu quả.
-        2.  **Architecture**: Mở rộng kiến trúc BitNet (BitLinear, Group Quantization) cho các thành phần xử lý đa phương thức (ví dụ: 1-bit Vision Transformer, 1-bit Audio Transformer). Thiết kế các module cross-modal attention 1-bit.
-        3.  **Training**: Huấn luyện từ đầu trên một tập dữ liệu đa phương thức quy mô lớn (ví dụ, kết hợp WebLI, LAION, AudioSet, WebVid). Sử dụng các kỹ thuật huấn luyện của BitNet (straight-through estimator, large learning rate).
-        4.  **Objective**: Một hàm mục tiêu thống nhất, có thể là dự đoán token kế tiếp cho tất cả các modality, hoặc kết hợp các loss chuyên biệt cho từng modality (đã được binarize nếu có thể).
-    *   **Dataset + Metrics**: Các benchmark đa phương thức hiện có (VQAv2, COCO Captions, MSR-VTT, AudioCaps), nhưng cần đánh giá thêm về hiệu quả tính toán (FLOPs, memory, energy).
-    *   **Risk/Feasibility**: Rất cao (Moon-shot). Thách thức chính là mất mát thông tin lớn khi binarize dữ liệu đa phương thức (đặc biệt là image/video). Việc thiết kế các toán tử 1-bit hiệu quả cho các phép toán phức tạp trong xử lý tín hiệu (convolution, attention đa chiều) là cực kỳ khó. Scaling laws cho mô hình 1-bit đa phương thức chưa được biết.
-    *   **Feasibility Step**: Bắt đầu với một mô hình 1-bit cho hai modality trước, ví dụ text-image, rồi mở rộng dần.
+2310.10971 | CAML tái định nghĩa n-way k-shot image classification thành non-causal sequence modeling với ELMES class encoder, học khái niệm "in-context".
 
-    ✨ **Idea 4: Evolving LLM Programs with DSPy and Evolutionary Reward Search (Feasible, Interdisciplinary)**
-    *   **Motivation**: DSPy (2310.03714) cung cấp một cách có cấu trúc để xây dựng pipeline LLM. EUREKA (2310.12931) cho thấy LLM có thể tự sinh hàm thưởng cho RL. Kết hợp hai ý tưởng này để LLM tự tối ưu cấu trúc và tham số của DSPy programs.
-    *   **Key novelty**: Sử dụng một LLM "meta-optimizer" để đề xuất các thay đổi cho một DSPy program (ví dụ: thay đổi module, sửa signature, điều chỉnh teleprompter) và một LLM "reward generator" (như EUREKA) để đánh giá hiệu quả của chương trình DSPy đã thay đổi trên một tác vụ cụ thể, từ đó hướng dẫn quá trình tiến hóa.
-    *   **Approach**:
-        1.  Định nghĩa một không gian các phép biến đổi (mutations) cho DSPy programs (thêm/xóa module, thay đổi LM trong module, thay đổi signature, thay đổi chiến lược teleprompter).
-        2.  Sử dụng một LLM (Meta-LLM) để sinh các biến thể của DSPy program ban đầu.
-        3.  Với mỗi biến thể, sử dụng một LLM khác (Reward-LLM, tương tự EUREKA) để đánh giá "fitness" của nó trên một tập dữ liệu validation (ví dụ: độ chính xác, F1, hoặc một metric phức tạp hơn do Reward-LLM tự đề xuất).
-        4.  Áp dụng thuật toán evolutionary search (ví dụ: genetic algorithm) để chọn lọc và kết hợp các DSPy program tốt nhất, lặp lại quá trình.
-    *   **Dataset + Metrics**: Các benchmark NLP phức tạp đòi hỏi pipeline nhiều bước (ví dụ: HotPotQA, GSM8K). Metrics: hiệu năng trên tác vụ cuối cùng, chi phí tính toán của pipeline.
-    *   **Risk/Feasibility**: Trung bình đến cao. Thách thức là không gian tìm kiếm lớn và chi phí đánh giá mỗi DSPy program. Reward-LLM cần phải đáng tin cậy. Tuy nhiên, có thể bắt đầu với không gian biến đổi giới hạn và các tác vụ đơn giản hơn.
+Foundation Model Fusion & Continual Learning
 
-6.  **READING_LIST**
+2310.15308 | SAM-CLIP trộn SAM và CLIP qua multi-task distillation và continual learning, phát sinh khả năng zero-shot semantic segmentation.
 
-    *   2310.11453 – BitNet · Huấn luyện LLM 1-bit từ đầu, tiềm năng cách mạng hóa hiệu quả LLM.
-    *   2310.03714 – DSPy · Framework lập trình LLM mới, tự động tối ưu pipeline, rất thực tiễn.
-    *   2310.11511 – SELF-RAG · LLM tự truy vấn và tự đánh giá, một bước tiến tới RAG thông minh hơn.
-    *   2310.12931 – EUREKA · LLM tự sinh hàm thưởng cho RL, giải quyết vấn đề cốt lõi trong RL.
-    *   2310.17157 – DEJAVU · Contextual sparsity động cho inference LLM nhanh hơn, giải pháp hệ thống ấn tượng.
-    *   2310.16818 – DreamCraft3D · Kỹ thuật bootstrapped score distillation cho text-to-3D chất lượng cao.
-    *   2310.00704 – UniAudio · Mô hình nền tảng thống nhất cho nhiều tác vụ tạo âm thanh, tham vọng lớn.
-    *   2310.12773 – Safe RLHF · Tích hợp Safe RL vào RLHF, quan trọng cho an toàn LLM.
+2310.16226 | TIC-CLIP giới thiệu benchmark Time-Continual (TIC-DataComp) và giao thức streaming continual training cho CLIP với replay buffer.
 
-7.  **META_REFLECTION**
+Architecture Comparison
 
-    *   Xu hướng phát triển AI trong tập papers này cho thấy một sự tập trung mạnh mẽ vào việc **nâng cao hiệu quả, khả năng kiểm soát, và tính tự chủ của các mô hình lớn (đặc biệt là LLMs và Diffusion Models)**.
-        *   **Hiệu quả (Efficiency):** Nhiều nghiên cứu đột phá về lượng tử hóa (BitNet, FP8, Atom, LoftQ, TEQ), sparsity (DEJAVU, LoRAShear), PEFT (VeRA), và thuật toán tối ưu (FARZI, DPM-Solver-v3) nhằm giảm chi phí tính toán và bộ nhớ cho cả huấn luyện và inference.
-        *   **Khả năng kiểm soát (Controllability):** Trong generative AI, có nhiều nỗ lực để kiểm soát đầu ra tốt hơn, từ text-to-image (PIXART-α, Kandinsky, CustomNet), video (VideoCrafter, MotionDirector, FreeNoise), đến 3D (DreamCraft3D, Wonder3D, Progressive3D). Trong LLMs, kiểm soát hành vi thông qua alignment (Safe RLHF, Tuna) và decoding (Controlled Decoding, RAD) cũng được chú trọng.
-        *   **Tính tự chủ và Reasoning Nâng cao (Enhanced Autonomy & Reasoning):** LLMs đang được trang bị khả năng tự cải thiện (SELF-RAG, PIT, TRIPOST), tự lập kế hoạch và sử dụng công cụ (3D-GPT, Octopus, ControlLLM, ToolChain\*), tự sinh dữ liệu/hàm thưởng (S3, EUREKA, MathCodeInstruct). Các kỹ thuật prompting phức tạp hơn (FaR, Analogical Prompting) cũng nhằm tăng cường khả năng suy luận.
-        *   **Multimodal Integration:** Việc kết hợp nhiều modality (vision, language, audio) thành các foundation model thống nhất (PaLI-3, SALMONN, UniAudio, ITIT) và các hệ thống tương tác đa phương thức (MM-VID, MusicAgent, Loop Copilot) là một hướng đi rõ rệt.
-        *   **Data-Centric Approaches:** Tầm quan trọng của dữ liệu chất lượng cao và các phương pháp xử lý/tăng cường dữ liệu thông minh (RECAP, CommonCanvas, AgentInstruct, In-Context Pretraining) ngày càng được nhấn mạnh.
-        *   **Evaluation and Benchmarking:** Nhận thức về sự cần thiết của các phương pháp đánh giá toàn diện, đáng tin cậy cho các mô hình ngày càng phức tạp đang tăng lên, dẫn đến sự ra đời của nhiều benchmark và framework đánh giá mới (PROMETHEUS, JudgeLM, ImagenHub, DEsignBench, EvalCrafter, HALLUSION BENCH, SmartPlay, WIKIMIA).
-        *   **System-Level Innovations:** Các framework như DSPy, PockEngine, và các hệ thống LLM-agent cho thấy sự dịch chuyển từ việc chỉ phát triển model sang xây dựng các hệ thống AI hoàn chỉnh, có khả năng tương tác và tối ưu hóa end-to-end.
+2310.16764 | Đánh giá khả năng mở rộng của NFNet (ConvNet) trên JFT-4B, cho thấy hiệu suất tương đương ViT với cùng budget tính toán.
 
-    Nhìn chung, lĩnh vực AI đang tiến tới việc tạo ra các hệ thống thông minh hơn, hiệu quả hơn, đáng tin cậy hơn và có khả năng tự vận hành ở mức độ cao hơn.
+Multimodal Learning
+
+Vision-Language Models (VLM) / Multimodal LLMs (MLLM)
+
+Instruction Tuning & Architectures
+
+2310.03744 | Đề xuất Response Format Prompting, MLP Cross-Modal Connector và Pipeline Xử Lý Ảnh Độ Phân Giải Cao cho VLM.
+
+2310.09199 | PaLI-3 tích hợp SigLIP contrastively pretrained ViT-G/14, huấn luyện đa giai đoạn với curriculum resolution và mở rộng segmentation bằng VQ-VAE.
+
+2310.09478 | MiniGPT-v2 sử dụng token định danh tác vụ, ghép token hình ảnh lân cận và huấn luyện 3 giai đoạn cho MLLM.
+
+Visual Grounding & Referring Tasks
+
+2310.11441 | Set-of-Mark (SoM) Prompting kích hoạt khả năng grounding của GPT-4V bằng phân đoạn ảnh và gán dấu "speakable".
+
+Hallucination Mitigation
+
+2310.16045 | Woodpecker là framework hậu xử lý khử ảo giác training-free cho MLLM, sử dụng pipeline 5 bước và visual knowledge base.
+
+Evaluation & Benchmarking
+
+2310.14566 | HALLUSION BENCH là benchmark chẩn đoán lỗi hallucination ngôn ngữ và illusion thị giác trong LVLM với control pairs và GPT-4-assisted evaluation.
+
+2310.16534 | Đánh giá định lượng và phân tích hành vi của GPT-4V trên nhiều tác vụ thị giác-ngôn ngữ, bao gồm cả đặc điểm nhạy cảm.
+
+2310.19061 | Đánh giá toàn diện khả năng của GPT-4V trong VQA y tế, phân tích hạn chế và khả năng qua 7 khía cạnh.
+
+Video Understanding
+
+2310.19773 | MM-VID là hệ thống pipeline 4 mô-đun (pre-processing, knowledge collection, clip description, script generation) dùng GPT-4V/GPT-4 cho hiểu video dài.
+
+Audio-Language Integration
+
+2310.13289 | SALMONN là MLLM tích hợp Whisper và BEATs qua window-level Q-Former và few-shot activation tuning cho xử lý âm thanh tổng quát.
+
+2310.00704 | UniAudio là foundation model LLM thống nhất 11 tác vụ tạo âm thanh (speech, sounds, music) qua tokenization chung và multi-scale Transformer.
+
+Tool-Augmented LLMs for Multimodal Tasks
+
+2310.17796 | ControlLLM sử dụng Tool Graph (ToG) với DFS search và tool assessment module để điều phối thực thi chuỗi công cụ đa phương tiện.
+
+2310.11954 | MusicAgent là hệ thống tác nhân tự động dùng LLM phân tích yêu cầu và phối hợp công cụ âm nhạc đa nguồn với chuẩn I/O thống nhất.
+
+Reinforcement Learning (RL)
+
+RL from Human Feedback (RLHF) & Alignment
+
+2310.12773 | Safe RLHF tích hợp Safe RL (CMDP, Lagrangian dual) vào RLHF với annotation hai chiều (hữu ích, vô hại) và Cost Model.
+
+2310.03716 | Phân tích thiên vị độ dài (length bias) trong RLHF, cho thấy phần lớn cải thiện từ PPO là do tăng độ dài, đề xuất NRG metric.
+
+Reward Engineering & Modeling
+
+2310.12931 | EUREKA sử dụng LLM (GPT-4) với environment-as-context, evolutionary search và reward reflection để zero-shot sinh hàm thưởng cho RL.
+
+2310.12921 | VLM-RM sử dụng VLM tiền huấn luyện (CLIP) làm reward model zero-shot cho RL thị giác, với Goal-Baseline Regularization.
+
+Preference-based Policy Learning
+
+2310.13639 | Contrastive Preference Learning (CPL) học chính sách trực tiếp từ phản hồi ưu tiên dựa trên regret, không cần học reward model.
+
+Embodied AI & Robotics
+
+Vision-Language Modeling for Embodiment
+
+2310.08588 | Octopus là mô hình lập trình viên thị giác-ngôn ngữ (VLM) sinh mã Python thực thi tác vụ trong môi trường OctoVerse, huấn luyện bằng RLEF.
+
+LLM-Driven Planning & Control
+
+2310.10645 | ITP là khung hai cấp (high-level planner, low-level executor) dùng LLM với vision module và replanning động cho robot.
+
+2310.10625 | Video Language Planning (VLP) kết hợp VLM (policy, heuristic) và T2V model (dynamics) cho lập kế hoạch video dài hạn trong robot.
+
+Knowledge Distillation
+
+2310.13332 | Đề xuất học tương tác đa vòng giữa LM nhỏ và LLM đen, kết hợp self-reflection (triplet loss) để chưng cất khả năng suy luận.
+
+ML Systems
+
+Efficient On-Device Fine-tuning
+
+2310.17752 | PockEngine là framework huấn luyện dựa trên biên dịch (compilation-based) cho fine-tuning hiệu quả và thưa (sparse backpropagation) trên thiết bị biên.
+
+Low-bit LLM Serving
+
+2310.19102 | Atom là thuật toán lượng tử hóa 4-bit (trọng số, kích hoạt) cho LLM serving, kết hợp mixed-precision, channel reordering và custom CUDA kernels.
+
+Other
+
+2310.10837 | Khung thống nhất cho xấp xỉ MLP hai lớp trong Transformer (Top-K activation, PKM cải tiến, σ-MoE), với regularization và khởi tạo mới.
+
+2310.09983 | FARZI đề xuất data distillation cho dữ liệu tự hồi quy bằng low-rank latent summary, reverse-mode differentiation cho Adam.
+
+2310.12274 | Multi-Concept Prompt Learning (MCPL) học đồng thời nhiều prompt concept từ câu-ảnh không cần annotation, dùng Attention Masking và Prompts Contrastive Loss.
+
+2310.03734 | ITIT là khung huấn luyện dựa trên cycle consistency (T2I2T, I2T2I) cho mô hình sinh vision-language, tận dụng dữ liệu không cặp đôi.
+
+SOTA_HIGHLIGHTS
+
+Rank	PaperID	Keywords (≤ 5)	Đột phá	Ảnh hưởng
+1	2310.11453	1-bit LLM, BitNet, BitLinear, Training from scratch	Giới thiệu BitNet, kiến trúc Transformer 1-bit đầu tiên cho LLM được huấn luyện từ đầu, thay vì hậu lượng tử hóa.	Tiềm năng giảm đáng kể chi phí bộ nhớ, năng lượng và tăng tốc độ cho LLM, mở đường cho LLM hiệu quả hơn trên thiết bị hạn chế tài nguyên.
+2	2310.11511	SELF-RAG, Retrieval-Augmented, Self-Reflection	LLM chủ động quyết định khi nào cần truy xuất, tự sinh truy vấn và tự đánh giá chất lượng đầu ra bằng reflection tokens.	Cải thiện tính xác thực và độ tin cậy của LLM trong các tác vụ đòi hỏi kiến thức, giảm hallucination, tăng khả năng kiểm soát.
+3	2310.12931	EUREKA, Reward Shaping, LLM for RL, Zero-shot	Tự động hóa việc thiết kế hàm thưởng phức tạp cho RL bằng cách sử dụng LLM (GPT-4) zero-shot với environment-as-context và evolutionary search.	Cách mạng hóa quy trình reward engineering, cho phép giải quyết các bài toán RL phức tạp mà trước đây đòi hỏi chuyên môn sâu và tinh chỉnh thủ công.
+4	2310.00426	PIXART-α, Efficient T2I, Diffusion Transformer, SAM-LLaVA	Kiến trúc T2I Transformer hiệu quả (PIXART-α) với chiến lược huấn luyện 3 giai đoạn và quy trình tạo dữ liệu auto-labeling giàu thông tin.	Giảm đáng kể thời gian huấn luyện (88%) và tài nguyên tính toán cho các mô hình T2I chất lượng cao, dân chủ hóa việc phát triển mô hình T2I.
+5	2310.17157	DEJAVU, Contextual Sparsity, LLM Inference, Lookahead Predictor	Giới thiệu "contextual sparsity" động và predictor bất đồng bộ, cho phép tăng tốc LLM inference đáng kể trên GPU mà không giảm chất lượng.	Giải quyết một trong những thách thức lớn của LLM deployment là độ trễ và chi phí tính toán, giúp LLM dễ tiếp cận và sử dụng trong ứng dụng thời gian thực hơn.
+6	2310.15008	Wonder3D, Single-Image 3D, Multi-view Diffusion, Normal Fusion	Tạo đồng thời bản đồ pháp tuyến và ảnh màu đa quan điểm từ ảnh đơn bằng diffusion model, sau đó hợp nhất thành lưới 3D có texture.	Đơn giản hóa và tăng tốc đáng kể quá trình tạo nội dung 3D chất lượng cao từ một ảnh duy nhất, có tiềm năng lớn cho VR/AR và game.
+7	2310.12773	Safe RLHF, Constrained MDP, Lagrangian Dual, Alignment	Tích hợp Safe RL vào RLHF bằng CMDP và Lagrangian dual, tách biệt annotation hữu ích/vô hại để tối ưu LLM an toàn và hữu ích.	Cung cấp một phương pháp có nguyên tắc để cân bằng giữa tính hữu ích và tính an toàn của LLM, một vấn đề quan trọng trong AI alignment.
+8	2310.03714	DSPy, LM Programming, Pipeline Optimization, Teleprompters	Framework lập trình LM trừu tượng hóa pipeline thành graph, tự động tối ưu prompt/fine-tuning bằng "teleprompters".	Thay đổi cách xây dựng và tối ưu hóa các ứng dụng dựa trên LM, giúp quá trình này trở nên có hệ thống, hiệu quả và ít phụ thuộc vào prompt engineering thủ công.
+NOVEL_TECH_CONTRIBUTIONS
+
+2310.11453 – BitLinear & Group Quantization – Suy nghĩ: Thành phần 1-bit thay thế nn.Linear và kỹ thuật quantization theo nhóm là cốt lõi cho việc huấn luyện LLM 1-bit từ đầu, rất hứa hẹn cho LLM siêu hiệu quả.
+
+2310.03502 – Image Prior (Diffusion Transformer-Encoder) & Sber-MoVQGAN – Suy nghĩ: Image prior học ánh xạ text embedding sang image embedding giúp định hướng latent diffusion tốt hơn; MoVQ tùy biến cải thiện giải mã. Kết hợp này có tiềm năng cho T2I chất lượng cao.
+
+2310.11511 – Reflection Tokens (Retrieve, ISREL, ISSUP, ISUSE) & Beam Search cấp đoạn – Suy nghĩ: Token đặc biệt cho phép LLM học khi nào truy vấn và tự đánh giá, beam search cấp đoạn tối ưu hóa quá trình sinh có truy vấn. Rất sáng tạo và giải quyết vấn đề "khi nào nên RAG".
+
+2310.00426 – AdaLN-single & SAM-LLaVA auto-labeling – Suy nghĩ: AdaLN-single giảm tham số đáng kể trong DiT; quy trình auto-labeling tạo caption dày đặc khái niệm giúp huấn luyện T2I hiệu quả hơn. Hướng tiếp cận data-centric mạnh mẽ.
+
+2310.12945 – Hệ thống đa tác nhân LLM cho 3D (Task Dispatch, Conceptualization, Modeling) & Prompt Engineering với tài liệu hàm – Suy nghĩ: Phân chia vai trò LLM để xử lý các khía cạnh khác nhau của việc tạo 3D từ text là một cách tiếp cận thông minh, không cần huấn luyện mạng neural.
+
+2310.10631 – Proof-Pile-2 & AlgebraicStack datasets – Suy nghĩ: Các bộ dữ liệu chuyên biệt này là đóng góp quan trọng cho cộng đồng nghiên cứu lý luận toán học bằng LLM, thúc đẩy phát triển trong lĩnh vực này.
+
+2310.08491 – FEEDBACK COLLECTION dataset & Chuỗi sinh feedback rồi sinh score với marker [RESULT] – Suy nghĩ: Dataset quy mô lớn cho evaluator LLM và chiến lược fine-tuning giải quyết degeneration là những đóng góp thực tiễn cho việc đánh giá LLM.
+
+2310.16656 – RECAP (PaLI tinh chỉnh tái chú thích LAION) & Prefix conditioning (RECAP Short/Long) – Suy nghĩ: Cải thiện chất lượng caption đầu vào cho T2I là một hướng data-centric hiệu quả, prefix conditioning giúp kiểm soát độ chi tiết.
+
+2310.15916 – Phân tách ICL thành A (học) và f (ứng dụng) qua Task Vector patching – Suy nghĩ: Cung cấp một khung giả thuyết rõ ràng và cơ chế thực nghiệm để hiểu rõ hơn về cách ICL hoạt động trong LLM.
+
+2310.15111 – NestedUNet & Progressive Training cho Multi-Resolution Diffusion – Suy nghĩ: Kiến trúc lồng nhau và lịch trình huấn luyện tiến triển cho phép tạo ảnh/video độ phân giải cao trong không gian pixel mà không cần cascaded models hay latent diffusion.
+
+2310.09263 – Table-tuning paradigm & Augment dữ liệu 4 cấp độ cho table tasks – Suy nghĩ: Mở rộng instruction-tuning cho dữ liệu bảng hai chiều và chiến lược augment dữ liệu đa dạng là hướng đi mới để LLM hiểu bảng tốt hơn.
+
+2310.11448 – 4K4D representation (điểm đám mây 4D + lưới đặc trưng 4D) & Differentiable Depth Peeling – Suy nghĩ: Kết hợp rasterization phần cứng với representation 4D và depth peeling khả vi cho phép render real-time cảnh động chất lượng cao.
+
+2310.03744 – MLP Cross-Modal Connector & Pipeline Xử Lý Ảnh Độ Phân Giải Cao (chia lưới, hợp nhất feature) – Suy nghĩ: Connector MLP tăng khả năng biểu diễn liên modal; pipeline xử lý ảnh HD linh hoạt và hiệu quả dữ liệu cho VLM.
+
+2310.12823 – AgentInstruct dataset & AgentTuning (lai ghép D_agent với D_general) – Suy nghĩ: Dataset tương tác agent đa tác vụ và chiến lược fine-tuning lai ghép là đóng góp quan trọng để LLM có năng lực agent mà vẫn giữ khả năng chung.
+
+2310.08588 – OctoVerse environments & Reinforcement Learning with Environmental Feedback (RLEF) – Suy nghĩ: Bộ môi trường đa dạng và RLEF cung cấp nền tảng tốt để huấn luyện và đánh giá VLM sinh mã thực thi trong môi trường tương tác.
+
+2310.17631 – Swap Augmentation & Reference Support/Drop cho JudgeLM – Suy nghĩ: Các kỹ thuật này giúp giảm các loại bias (position, knowledge, format) khi huấn luyện LLM làm giám khảo, tăng tính tổng quát.
+
+2310.16825 – Telephoning (BLIP-2 tạo chú thích tổng hợp) & CommonCatalog dataset – Suy nghĩ: Sử dụng VLM để tạo chú thích tổng hợp cho dữ liệu không nhãn là một cách thông minh để xây dựng dataset T2I chất lượng cao, có bản quyền rõ ràng.
+
+2310.03051 – Foresee and Reflect (FaR) prompting framework – Suy nghĩ: Cấu trúc hai bước (dự đoán diễn biến, đánh giá và chọn hành động) giúp LLM định hướng suy luận tốt hơn cho các bài toán kết nối Theory of Mind với hành động.
+
+2310.03714 – DSPy programming model (Signatures, Modules, Teleprompters) – Suy nghĩ: Trừu tượng hóa pipeline LM thành graph với các module có thể học và tối ưu tự động là một bước tiến lớn so với prompt engineering thủ công.
+
+2310.18313 – Precision decoupling & Automatic scaling cho FP8 training – Suy nghĩ: Các kỹ thuật này giúp ngăn underflow/overflow và áp dụng FP8 end-to-end (tính toán, lưu trữ, giao tiếp) cho huấn luyện LLM, rất quan trọng cho hiệu quả.
+
+2310.16818 – Bootstrapped Score Distillation (LBSD) & Progressive View Training cho 3D – Suy nghĩ: LBSD cho phép mô hình 3D tự cải thiện qua việc fine-tune DreamBooth trên render đa góc nhìn; progressive view training giúp tối ưu geometry.
+
+2310.11454 – VeRA (Vector-based Random Matrix Adaptation) – Suy nghĩ: Chỉ học vector scaling và chia sẻ ma trận ngẫu nhiên cố định giúp giảm đáng kể tham số trainable so với LoRA, rất hiệu quả về bộ nhớ.
+
+2310.10638 – IN-CONTEXT PRETRAINING với thuật toán Maximum Traveling Salesman trên đồ thị tài liệu – Suy nghĩ: Sắp xếp tài liệu theoความ liên quan ngữ nghĩa để huấn luyện LLM là một ý tưởng độc đáo, có thể cải thiện khả năng học ngữ cảnh dài.
+
+2310.03731 – MathCodeInstruct dataset (LCE: Language-Code-Execution) & Problem interpolation prompting – Suy nghĩ: Dataset tích hợp thực thi mã và chiến lược sinh bài toán mới giúp LLM học suy luận toán học kết hợp công cụ hiệu quả.
+
+2310.12773 – Safe RLHF với Cost Model và Lagrangian dual – Suy nghĩ: Chính thức hóa RLHF an toàn dưới dạng CMDP và tách biệt annotation hữu ích/vô hại là một đóng góp quan trọng cho AI alignment.
+
+2310.11441 – Set-of-Mark (SoM) Prompting & Mark Allocation algorithm – Suy nghĩ: Sử dụng dấu "speakable" và thuật toán đặt dấu thông minh để GPT-4V thực hiện visual grounding zero-shot là một cách tiếp cận rất thực tế.
+
+2310.08659 – LoftQ (Low-rank-aware initialization cho LoRA quantization) – Suy nghĩ: Đồng thời tối ưu trọng số lượng tử hóa và adapters ngay từ đầu giúp cải thiện hiệu suất fine-tuning ở bit thấp.
+
+2310.16795 – QMoE (Quantized MoE) với expert grouping và LZW-like sub-1-bit compression – Suy nghĩ: Các kỹ thuật này cho phép nén mô hình MoE khổng lồ xuống sub-1-bit với overhead thấp, rất quan trọng cho deployment.
+
+2310.14566 – HALLUSION BENCH với control pairs & GPT-4-assisted evaluation – Suy nghĩ: Benchmark chẩn đoán lỗi hallucination/illusion với cấu trúc cặp câu hỏi so sánh và đánh giá tự động bằng GPT-4 là công cụ hữu ích.
+
+2310.09199 – SigLIP contrastive pretraining cho VLM & Segmentation bằng VQ-VAE mask tokens – Suy nghĩ: SigLIP cải thiện localization; VQ-VAE mask tokens cho phép VLM xuất segmentation mask như text.
+
+2310.12931 – Environment-as-context & Reward reflection cho EUREKA – Suy nghĩ: Đưa mã nguồn môi trường vào LLM và tổng hợp thống kê huấn luyện thành feedback text giúp LLM tự động sinh hàm thưởng RL hiệu quả.
+
+2310.13639 – Contrastive Preference Learning (CPL) & Bias regularizer – Suy nghĩ: Học chính sách trực tiếp từ preference không cần reward model, bias regularizer cải thiện trên dữ liệu offline hữu hạn.
+
+2310.11954 – MusicAgent với chuẩn I/O thống nhất cho công cụ âm nhạc & Task Planner/Tool Selector/Executor/Response Generator – Suy nghĩ: Kiến trúc agent phối hợp nhiều công cụ âm nhạc chuyên biệt thông qua LLM và chuẩn I/O chung mở ra hướng mới cho sáng tạo âm nhạc AI.
+
+2310.18356 – LoRA Half-Space Projected Gradient (LHSPG) & Dynamic knowledge recovery – Suy nghĩ: LHSPG cho phép pruning có cấu trúc LLM gắn LoRA và chuyển giao kiến thức; dynamic recovery giúp phục hồi hiệu năng.
+
+2310.15308 – SAM-CLIP multi-head architecture & Two-stage multi-task distillation – Suy nghĩ: Kiến trúc backbone chung với head riêng và quy trình học liên tục, chưng cất đa tác vụ giúp hợp nhất hiệu quả hai VFM.
+
+2310.00898 – PIT (Implicit Self-Improvement) với Reward model RPIT (reward gap) & Curriculum Reinforcement Learning – Suy nghĩ: Cho phép LLM tự học cải tiến từ preference data mà không cần rubric, reward gap và curriculum RL là những ý tưởng mới.
+
+2310.15008 – Domain switcher & Multi-view self-attention / Cross-domain attention cho Wonder3D – Suy nghĩ: Domain switcher cho phép UNet xử lý đa miền (normal, color) mà không quên kiến thức; các cơ chế attention đảm bảo nhất quán hình học và vật liệu.
+
+2310.09478 – Token định danh tác vụ & Ghép token hình ảnh lân cận cho MiniGPT-v2 – Suy nghĩ: Token tác vụ giúp MLLM phân biệt lệnh; ghép token hình ảnh giảm tính toán mà vẫn giữ độ phân giải.
+
+2310.00704 – UniAudio multi-scale Transformer (global & local) & Tokenization thống nhất cho âm thanh – Suy nghĩ: Kiến trúc Transformer đa tỉ lệ xử lý chuỗi âm thanh dài hiệu quả; tokenization chung cho nhiều loại âm thanh và điều kiện là bước tiến tới foundation model cho audio.
+
+2310.19773 – MM-VID pipeline (Pre-Processing, Knowledge Collection, Clip Description, Script Generation) & Visual Prompting cho GPT-4V – Suy nghĩ: Pipeline module hóa sử dụng GPT-4V/GPT-4 để hiểu video dài và tạo kịch bản chi tiết.
+
+2310.12921 – VLM-RM (VLM as Reward Model) & Goal-Baseline Regularization – Suy nghĩ: Sử dụng VLM (CLIP) zero-shot làm reward model cho RL thị giác và kỹ thuật regularization mới giúp định hướng reward.
+
+2310.01407 – CoDi (Conditional Diffusion Distillation) & Tính nhất quán khuếch tán có điều kiện – Suy nghĩ: Chưng cất LDM có điều kiện không cần dữ liệu gốc, dựa trên tính nhất quán PF-ODE, rất thực tiễn.
+
+2310.13671 – S3 (Synthesis Step by Step) với Error Extrapolation-based Synthesis (EES) – Suy nghĩ: Sử dụng lỗi của mô hình nhỏ để hướng dẫn LLM sinh dữ liệu tổng hợp chất lượng cao hơn là một cách tiếp cận data synthesis lặp thông minh.
+
+2310.03214 – FRESH PROMPT với sắp xếp chứng cứ theo thời gian – Suy nghĩ: Tích hợp chứng cứ từ search engine vào prompt, ưu tiên thông tin mới, giúp LLM trả lời câu hỏi cần kiến thức cập nhật.
+
+2310.17796 – ControlLLM với Tool Graph (ToG) và DFS search – Suy nghĩ: Xây dựng đồ thị công cụ và dùng thuật toán tìm kiếm để LLM điều phối các tool đa phương tiện là một cách tiếp cận có cấu trúc.
+
+2310.13268 – DPM-Solver-v3 với Empirical Model Statistics (EMS) & Pseudo-order solver – Suy nghĩ: EMS tự động tối ưu parameterization cho ODE solver; pseudo-order solver ổn định ở NFE thấp.
+
+2310.08541 – Idea2Img với GPT-4V 3 vai trò (sinh/sửa prompt, chọn ảnh, phản hồi) & Bộ nhớ lịch sử thử nghiệm – Suy nghĩ: Framework tự động khám phá và tối ưu prompt cho T2I model bằng LMM, không cần biết trước về T2I model.
+
+2310.08529 – GaussianDreamer với Noisy point growing & Color perturbation – Suy nghĩ: Kết hợp diffusion 3D (khởi tạo) và 2D (tối ưu SDS) trên Gaussian Splatting, các phép perturbation tăng chi tiết.
+
+2310.13289 – SALMONN với Window-level Q-Former & Few-shot activation tuning – Suy nghĩ: Q-Former theo cửa sổ xử lý audio dài; activation tuning kích hoạt khả năng cross-modal của MLLM âm thanh.
+
+2310.11440 – EvalCrafter với SD-Score & Human-alignment bằng hồi quy tuyến tính – Suy nghĩ: SD-Score phát hiện concept forgetting trong T2V; human-alignment giúp objective metrics khớp đánh giá người dùng.
+
+2310.10971 – CAML với ELMES Class Encoder & Pre-training đa miền – Suy nghĩ: Mã hóa nhãn bằng ELMES và pre-training trên nhiều bộ dữ liệu cho phép universal few-shot classification "in-context".
+
+2310.08579 – Latent Structural Diffusion Model (RGB, depth, normal) & Structure-Guided Refiner – Suy nghĩ: Đồng thời khử nhiễu đa cấu trúc trong latent space và refiner đa điều kiện cho sinh ảnh người chất lượng cao.
+
+2310.19512 – VideoCrafter với Spatial & Temporal Transformers & Text-Aligned Rich Image Embedding – Suy nghĩ: Kiến trúc U-Net 3D tách biệt ST/TT và nhánh I2V với embedding ảnh phong phú giúp tạo video chất lượng từ text/image.
+
+2310.16045 – Woodpecker pipeline (trích xuất concept, tạo câu hỏi, xác thực visual knowledge, tạo visual claims, sửa lỗi) – Suy nghĩ: Framework hậu xử lý training-free dùng LLM và vision models để tự động phát hiện và sửa hallucination trong MLLM.
+
+2310.13332 – Interactive multi-round distillation với student feedback & Self-reflection triplet loss – Suy nghĩ: Vòng lặp tương tác giữa student LM và teacher LLM, kết hợp học từ lỗi của chính mình, giúp chưng cất khả năng suy luận hiệu quả.
+
+2310.08740 – Compact screen representation & Staged plan-and-follow / Structured thought management – Suy nghĩ: Các kỹ thuật này cho phép LLM zero-shot điều khiển UI máy tính hiệu quả hơn, giảm số lần gọi LLM và quản lý "suy nghĩ" tốt hơn.
+
+2310.08465 – MotionDirector với Dual-Path LoRAs & Appearance-debiased temporal loss – Suy nghĩ: Tách biệt học appearance và motion trong video diffusion, cho phép tùy biến chuyển động và áp dụng lên nhiều appearance khác nhau.
+
+2310.01714 – Analogical prompting với Self-generated exemplars & tutorials – Suy nghĩ: LLM tự sinh ví dụ và kiến thức liên quan "on-the-fly" để giải quyết vấn đề, không cần few-shot examples thủ công.
+
+2310.17075 – HyperFields (dynamic hypernetwork dự đoán trọng số NeRF) & NeRF distillation loss – Suy nghĩ: Sinh trọng số NeRF động theo văn bản và activation, cho phép zero-shot/few-shot text-to-3D nhanh.
+
+2310.17022 – Controlled Decoding (CD) với CD-Q (Bellman update) & Blockwise CD – Suy nghĩ: Framework RL tokenwise giữ base LM cố định, điều khiển sinh văn bản qua prefix scorer, hỗ trợ multi-objective.
+
+2310.12404 – Loop Copilot với Global Attribute Table – Suy nghĩ: LLM điều phối nhiều AI âm nhạc chuyên biệt, GAT duy trì trạng thái nhạc qua nhiều vòng chỉnh sửa, rất thực tiễn cho sáng tạo tương tác.
+
+2310.03734 – ITIT (Image-Text-Image-Text cycle consistency) & Kiến trúc encoder chung, decoder riêng – Suy nghĩ: Huấn luyện VLM sinh trên dữ liệu không cặp đôi bằng cycle consistency, giảm đáng kể nhu cầu dữ liệu cặp đôi.
+
+2310.17752 – PockEngine với sparse backpropagation (graph pruning, dead code elimination) – Suy nghĩ: Framework biên dịch cho fine-tuning thưa hiệu quả trên thiết bị biên, hiện thực hóa lợi ích của sparse BP.
+
+2310.16836 – Pre-shifted exponent bias cho FPQ & Grid search tham số định dạng/clip – Suy nghĩ: Kỹ thuật reparameterize exponent bias giúp lượng tử hóa FP4 hiệu quả cho cả trọng số và kích hoạt LLM.
+
+2310.12963 – Self-verification dạng entailment & Router POMDP cho LLM cascade – Suy nghĩ: Ước tính độ tin cậy của SLM bằng entailment và dùng POMDP để định tuyến truy vấn giữa các LLM black-box.
+
+2310.09139 – CONSENSUS GAME & EQUILIBRIUM-RANKING (no-regret learning) – Suy nghĩ: Framework lý thuyết trò chơi cho giải mã ngôn ngữ, kết hợp generative và discriminative LM mà không cần fine-tuning.
+
+2310.17784 – FLLM với Abductive Augmentation Reasoning (AAR: FAP, FAE, FADOM) – Suy nghĩ: FLLM tiền xử lý dữ liệu tài chính; AAR tự động sinh, kiểm tra, hiệu chỉnh nhãn giả để tăng cường dữ liệu huấn luyện.
+
+2310.13227 – ToolChain (A search cho LLM tool use) & Hàm chi phí/heuristic kết hợp long-term memory, self-consistency, imagination score – Suy nghĩ:** Thuật toán A* hiệu quả để LLM tìm kiếm trong không gian hành động của công cụ.
+
+2310.13119 – DreamSpace (top-down panoramic texturing) & Dual texture alignment / Implicit texture imitating – Suy nghĩ: Pipeline toàn diện cho texturing lưới cảnh 360° từ điểm nhìn trung tâm, xử lý tốt vùng che khuất.
+
+2310.12962 – Emulated Fine-Tuning (EFT) & Up-Scaling / Test-time blending – Suy nghĩ: Phân tách quy mô pretrain và finetune, cho phép giả lập fine-tuning mô hình lớn bằng mô hình nhỏ và điều chỉnh hành vi runtime.
+
+2310.12274 – Multi-Concept Prompt Learning (MCPL) với Attention Masking & Prompts Contrastive Loss – Suy nghĩ: Học đồng thời nhiều concept prompt từ một câu-ảnh không cần annotation, rất hiệu quả về bộ nhớ.
+
+2310.10645 – ITP (Iterative Task Planning) với high-level planner & low-level executor (LLM) – Suy nghĩ: Khung LLM hai cấp cho robot, tự động chuyển skill Python thành API và replanning động.
+
+2310.10837 – σ-MoE (sigmoid gating, Top-K experts) & PKM cải tiến (ReLU, Top-K) – Suy nghĩ: Các cải tiến này cho MoE và PKM giúp xấp xỉ MLP hiệu quả hơn trong Transformer.
+
+2310.09983 – FARZI (Factorized Autoregressive Data Distillation) & Reverse-mode differentiation cho Adam – Suy nghĩ: Chưng cất dữ liệu tự hồi quy thành latent summary, thuật toán đạo hàm ngược hiệu quả cho Adam giúp tối ưu meta-learning.
+
+2310.08715 – SUTLM (Speech-Unit and Text Language Model) & CRA/PELM metrics / CST/AST mixing – Suy nghĩ: Mô hình LM chung cho cả speech unit và text, cùng các kỹ thuật trộn và metric đánh giá cross-modal mới.
+
+2310.19102 – Atom (4-bit quantization) với Mixed-precision channel reordering & Fused group quantization – Suy nghĩ: Giải pháp lượng tử hóa 4-bit toàn diện cho LLM serving, tối ưu phần cứng và xử lý outlier hiệu quả.
+
+GAPS_AND_OPPORTUNITIES
+
+Hiệu quả và Khả năng mở rộng của LLM:
+
+Gaps: Nhiều phương pháp PEFT (VeRA, LoftQ) dù giảm tham số trainable nhưng vẫn cần đánh giá kỹ về hiệu năng trên các tác vụ phức tạp và khả năng kết hợp với các kỹ thuật nén khác. Chi phí huấn luyện và inference cho các mô hình cực lớn (ví dụ MoE trong 2310.16795) vẫn là rào cản. Các phương pháp lượng tử hóa (BitNet, FP8, FPQ, TEQ, Atom) cần khám phá sâu hơn về ảnh hưởng đến các khả năng phức tạp như reasoning và in-context learning ở các bit-width cực thấp.
+
+Opportunities: Phát triển các kỹ thuật PEFT/quantization mới ít ảnh hưởng đến downstream performance hơn nữa. Nghiên cứu kiến trúc LLM mới vốn đã hiệu quả (ví dụ: non-Transformer). Tối ưu hóa thuật toán và phần cứng cho sparse/quantized LLM. Khám phá giới hạn của việc scaling down (ví dụ: sub-1-bit) mà vẫn giữ được năng lực.
+
+Multimodality (Đa phương thức):
+
+Gaps: Hầu hết các MLLM (PaLI-3, MiniGPT-v2, SALMONN) vẫn dựa trên việc kết nối các encoder chuyên biệt với một LLM text-based. Sự tích hợp sâu và học từ đầu (end-to-end) cho nhiều modal (đặc biệt là video, audio phức tạp, 3D) còn hạn chế. Vấn đề hallucination trong MLLM (2310.16045, 2310.14566) vẫn là thách thức lớn. Đánh giá MLLM (2310.11440, 2310.14566, 2310.16534, 2310.19061) cần các benchmark toàn diện và phương pháp tự động đáng tin cậy hơn.
+
+Opportunities: Kiến trúc MLLM thực sự "multimodal-native". Phương pháp hiệu quả để pretrain MLLM trên dữ liệu đa phương thức quy mô lớn, có thể tận dụng dữ liệu không cặp đôi (như 2310.03734). Kỹ thuật grounding tốt hơn giữa các modal. Giải pháp mạnh mẽ hơn cho hallucination mitigation trong MLLM. Phát triển benchmark động và tương tác cho MLLM.
+
+Generative AI (Đặc biệt là 3D và Video):
+
+Gaps: Tạo 3D (Wonder3D, DreamCraft3D, GaussianDreamer, Progressive3D, HyperFields) và video (VideoCrafter, MotionDirector, FreeNoise) chất lượng cao, nhất quán, có thể điều khiển và dài vẫn là bài toán khó. Các phương pháp hiện tại thường tốn kém tài nguyên, giới hạn độ phân giải/thời lượng, hoặc gặp vấn đề về tính nhất quán (temporal, view). Điều khiển chi tiết (ví dụ: tương tác vật lý, biểu cảm phức tạp) còn hạn chế.
+
+Opportunities: Diffusion model hiệu quả hơn cho 3D/video. Phương pháp kết hợp các representation khác nhau (explicit meshes, implicit fields, Gaussian splatting). Kỹ thuật điều khiển (control signals) tinh vi hơn. Tận dụng LLM/VLM để lập kế hoạch và điều khiển quá trình sinh 3D/video (như 2310.10625).
+
+Reasoning, Planning, và Agent Capabilities:
+
+Gaps: Khả năng suy luận phức tạp, đa bước, và lập kế hoạch dài hạn của LLM (đặc biệt trong môi trường tương tác như 2310.08588, 2310.10645, 2310.08740, 2310.13227) vẫn cần cải thiện. Việc tích hợp tool use một cách linh hoạt và hiệu quả (ControlLLM, ToolChain*) còn nhiều thách thức. Khả năng tự sửa lỗi nội tại (2310.01798) của LLM còn yếu.
+
+Opportunities: Phát triển kiến trúc và phương pháp huấn luyện LLM tăng cường khả năng reasoning và planning. Framework agent tổng quát hơn, có khả năng học hỏi từ tương tác và tự cải thiện (như EUREKA, TRIPOST, PIT). Nghiên cứu sâu hơn về mechanistic interpretability của ICL (2310.15916) để cải thiện reasoning.
+
+Alignment, Safety, và Evaluation:
+
+Gaps: RLHF có thể bị ảnh hưởng bởi length bias (2310.03716). Việc đảm bảo an toàn và tránh các hành vi không mong muốn một cách có hệ thống (Safe RLHF) vẫn là một lĩnh vực đang phát triển. Đánh giá LLM (PROMETHEUS, JudgeLM, SmartPlay, DEsignBench, HALLUSION BENCH, WIKIMIA) cần toàn diện hơn, ít bị "gaming" và phản ánh đúng năng lực thực tế trong các ứng dụng cụ thể (tài chính 2310.08678, y tế 2310.19061).
+
+Opportunities: Phương pháp alignment mới hiệu quả hơn, ít tốn kém hơn RLHF và ít bias hơn. Kỹ thuật "red teaming" tự động và benchmark an toàn mạnh mẽ hơn. Phát triển các metric đánh giá LLM/MLLM có khả năng diễn giải và chống lại các chiến lược đối phó.
+
+Data-Centric AI:
+
+Gaps: Chất lượng và sự đa dạng của dữ liệu huấn luyện vẫn là yếu tố then chốt. Các phương pháp tạo dữ liệu tổng hợp (RECAP, CommonCanvas, S3, MathCodeInstruct, TeacherData-2M, Auto-Instruct, FARZI) cần cải thiện về độ tin cậy và khả năng bao phủ các trường hợp hiếm.
+
+Opportunities: Kỹ thuật data augmentation và synthesis thông minh hơn, có thể tự động điều chỉnh theo nhu cầu của mô hình. Phương pháp tận dụng dữ liệu không nhãn/yếu nhãn hiệu quả hơn (như ITIT). Nghiên cứu về "data pruning" và "data selection" để huấn luyện hiệu quả hơn.
+
+On-Device AI và Efficiency:
+
+Gaps: Triển khai các mô hình lớn trên thiết bị biên với tài nguyên hạn chế (PockEngine, Atom) vẫn là một thách thức lớn, đòi hỏi sự đồng thiết kế giữa thuật toán và phần cứng.
+
+Opportunities: Các kỹ thuật nén (quantization, pruning, distillation) mới, đặc biệt cho các kiến trúc mới. Framework biên dịch và tối ưu hóa chuyên biệt cho on-device training/inference.
+
+Interpretability và Trustworthiness:
+
+Gaps: Hiểu rõ "tại sao" mô hình đưa ra một quyết định cụ thể (đặc biệt với LLM và MLLM) vẫn còn là một "hộp đen". Các phương pháp như của 2310.15916 (task vector) là bước đầu nhưng cần nhiều hơn nữa.
+
+Opportunities: Phát triển các công cụ và kỹ thuật mới để diễn giải hành vi của mô hình. Xây dựng các mô hình vốn đã có tính diễn giải (interpretable by design).
+
+FUTURE_IDEAS
+
+✨ Idea 1: Adaptive Contextual Sparsity for Multimodal LLMs
+
+Motivation: MLLMs xử lý nhiều loại dữ liệu (text, image, audio, video) dẫn đến chi phí tính toán rất lớn. DEJAVU (2310.17157) cho thấy contextual sparsity hiệu quả cho LLM text. Mở rộng ý tưởng này cho MLLM có thể mang lại lợi ích lớn.
+
+Key Novelty: Phát triển predictor không chỉ dựa trên text context mà còn cả đặc trưng từ các modal khác để dự đoán dynamic structured sparsity cho cả các thành phần xử lý cross-modal attention và các encoder/decoder chuyên biệt của MLLM.
+
+Approach:
+
+Thiết kế các lightweight predictors cho từng modality-specific component và cross-modal fusion layers.
+
+Input của predictor có thể là embedding từ các modal khác nhau và trạng thái ẩn của LLM.
+
+Huấn luyện predictors để dự đoán head/neuron nào có thể bỏ qua mà ít ảnh hưởng đến output cuối cùng trên các tác vụ MLLM.
+
+Tích hợp lookahead prediction và sparse kernels chuyên dụng cho MLLM.
+
+Dataset + Metrics: Sử dụng các benchmark MLLM như VQA (VQAv2), Image Captioning (COCO), Video QA (MSRVTT-QA). Metrics: Accuracy, BLEU, ROUGE, CIDEr, và đo lường speedup/FLOPs reduction.
+
+Risk/Feasibility: Cao. Khó khăn trong việc thiết kế predictor hiệu quả cho nhiều modal và sự phức tạp của việc triển khai sparse kernels cho kiến trúc MLLM đa dạng. Tính toán offline để huấn luyện predictor có thể tốn kém.
+
+✨ Idea 2: Self-Correcting Generative Agents for Complex 3D Scene Creation (Interdisciplinary: LLM Agents + 3D Generation + Robotics Principles)
+
+Motivation: Tạo cảnh 3D phức tạp, có ý nghĩa từ text (như 2310.12945, 2310.16818, 2310.08529) vẫn cần nhiều cải tiến về tính nhất quán, khả năng tương tác và tuân thủ các ràng buộc vật lý/logic. LLM agents (2310.12823, 2310.08588) có khả năng lập kế hoạch và sử dụng công cụ.
+
+Key Novelty: Một hệ thống LLM agent đa vai trò (Planner, Modeler, Physicist, Critic) sử dụng các công cụ tạo 3D (diffusion, procedural), công cụ mô phỏng vật lý, và khả năng tự phản ánh/sửa lỗi (như SELF-RAG 2310.11511, Woodpecker 2310.16045, PIT 2310.00898) để lặp đi lặp lại việc tạo và tinh chỉnh cảnh 3D cho đến khi đạt yêu cầu.
+
+Approach:
+
+Planner Agent: Phân rã yêu cầu text phức tạp thành các sub-tasks và đối tượng 3D cần tạo.
+
+Modeler Agent: Sử dụng các T23D models (GaussianDreamer, DreamCraft3D) hoặc procedural generation (3D-GPT) để tạo các thành phần.
+
+Physicist Agent: (Có thể là một simulator tích hợp) Kiểm tra tính hợp lý vật lý, tương tác giữa các đối tượng.
+
+Critic Agent: Sử dụng VLM (như GPT-4V) để đánh giá sự phù hợp của cảnh 3D với prompt ban đầu, tính nhất quán, và các lỗi tiềm ẩn. Sinh feedback cho Planner và Modeler.
+
+Vòng lặp refine dựa trên feedback, có thể sử dụng các kỹ thuật như EUREKA (2310.12931) để tinh chỉnh các tham số của công cụ tạo hình.
+
+Dataset + Metrics: Không có dataset chuẩn. Đánh giá dựa trên human evaluation về chất lượng, tính nhất quán, sự tuân thủ prompt, và tính hợp lý vật lý. Có thể phát triển benchmark mới với các yêu cầu phức tạp.
+
+Risk/Feasibility: Rất cao (Moon-shot). Đòi hỏi tích hợp nhiều hệ thống phức tạp, khả năng giao tiếp hiệu quả giữa các agent, và VLM đủ mạnh để làm Critic. Chi phí tính toán cực lớn.
+
+✨ Idea 3: Zero-Shot Cross-Lingual Table Understanding via Table-Tuned LLM with In-Context Pretraining
+
+Motivation: Table-GPT (2310.09263) cho thấy tiềm năng của việc "table-tuning" LLM cho các tác vụ hiểu bảng. IN-CONTEXT PRETRAINING (2310.10638) cải thiện khả năng học ngữ cảnh dài bằng cách sắp xếp tài liệu liên quan. Kết hợp hai ý tưởng này có thể tạo ra LLM hiểu bảng tốt hơn, đặc biệt là cho các ngôn ngữ ít tài nguyên.
+
+Key Novelty: Huấn luyện một LLM trên dữ liệu bảng đa ngôn ngữ, sử dụng IN-CONTEXT PRETRAINING trong đó các "tài liệu" là các bảng và mô tả/câu hỏi liên quan đến bảng đó, được nhóm theo ngôn ngữ hoặc chủ đề. Mục tiêu là LLM có thể zero-shot thực hiện các table tasks trên ngôn ngữ mới chỉ bằng cách cung cấp một vài ví dụ bảng và tác vụ bằng ngôn ngữ đó trong context.
+
+Approach:
+
+Thu thập dataset bảng đa ngôn ngữ (ví dụ: từ Wikipedia, các báo cáo tài chính công khai đa ngôn ngữ).
+
+Áp dụng IN-CONTEXT PRETRAINING: Nhóm các bảng và các cặp (instruction, completion) liên quan đến bảng theo ngôn ngữ hoặc chủ đề. Sử dụng thuật toán tương tự TSP để sắp xếp chuỗi các "table documents" này.
+
+Tiếp tục huấn luyện một LLM đa ngôn ngữ trên chuỗi dữ liệu bảng đã sắp xếp này.
+
+Fine-tune LLM bằng phương pháp table-tuning (như 2310.09263) trên một tập hợp con các ngôn ngữ có nhiều tài nguyên.
+
+Đánh giá khả năng zero-shot/few-shot trên các ngôn ngữ chưa từng thấy trong giai đoạn fine-tuning.
+
+Dataset + Metrics: Sử dụng các benchmark hiểu bảng hiện có và mở rộng sang phiên bản đa ngôn ngữ (ví dụ: WikiTableQuestions, Spider dịch sang nhiều ngôn ngữ). Metrics: Exact Match, F1 score cho các tác vụ như table QA, NL-to-SQL trên bảng.
+
+Risk/Feasibility: Trung bình đến Cao. Thu thập và chuẩn hóa dataset bảng đa ngôn ngữ chất lượng cao là một thách thức. Hiệu quả của IN-CONTEXT PRETRAINING cho dữ liệu bảng cần được kiểm chứng. Khả năng zero-shot cross-lingual có thể bị hạn chế bởi sự khác biệt cấu trúc giữa các ngôn ngữ.
+
+✨ Idea 4: Continual Learning for LLM-based Evaluators with Dynamic Rubric Adaptation
+
+Motivation: PROMETHEUS (2310.08491) và JudgeLM (2310.17631) là các LLM evaluator mạnh mẽ nhưng dựa trên rubric cố định hoặc dữ liệu huấn luyện tĩnh. Trong thực tế, tiêu chí đánh giá và các loại lỗi mới của LLM liên tục xuất hiện.
+
+Key Novelty: Phát triển một LLM evaluator có khả năng học liên tục (continual learning) từ các feedback mới và tự động điều chỉnh/mở rộng rubric đánh giá của nó. Sử dụng các kỹ thuật từ TIC-CLIP (2310.16226) cho replay buffer và các phương pháp phát hiện OOD để xác định khi nào cần cập nhật rubric.
+
+Approach:
+
+Huấn luyện một LLM evaluator ban đầu (như PROMETHEUS) trên FEEDBACK COLLECTION.
+
+Thiết lập một streaming protocol cho dữ liệu đánh giá mới (ví dụ: từ người dùng, từ các mô hình mới được kiểm tra).
+
+Sử dụng một replay buffer (chiến lược All hoặc Exp từ TIC-CLIP) để lưu trữ các mẫu đánh giá cũ và mới.
+
+Khi có dữ liệu mới, nếu mô hình evaluator không chắc chắn hoặc phát hiện mẫu OOD (ví dụ: loại lỗi mới, yêu cầu đánh giá mới), kích hoạt một module "Rubric Adaptation" (có thể là một LLM khác hoặc tương tác người dùng) để cập nhật/mở rộng rubric.
+
+Tiếp tục huấn luyện LLM evaluator trên dữ liệu trộn từ replay buffer và rubric đã cập nhật, chú trọng vào việc không quên các tiêu chí cũ.
+
+Dataset + Metrics: Bắt đầu với FEEDBACK COLLECTION. Dữ liệu mới sẽ được thu thập liên tục. Metrics: Pearson correlation với đánh giá của con người, tính nhất quán của evaluator theo thời gian, khả năng phát hiện lỗi mới.
+
+Risk/Feasibility: Cao. Đảm bảo tính ổn định và tránh catastrophic forgetting trong continual learning là khó. Tự động cập nhật rubric một cách đáng tin cậy là thách thức lớn, có thể cần human-in-the-loop.
+
+READING_LIST
+
+2310.11453 – BitNet · Giới thiệu LLM 1-bit huấn luyện từ đầu, đột phá về hiệu quả.
+
+2310.11511 – SELF-RAG · Framework RAG thông minh với khả năng tự truy vấn và tự đánh giá.
+
+2310.12931 – EUREKA · Phương pháp dùng LLM zero-shot để tự động sinh hàm thưởng cho RL, rất sáng tạo.
+
+2310.00426 – PIXART-α · Kiến trúc T2I Transformer hiệu quả và chiến lược huấn luyện data-centric.
+
+2310.03714 – DSPy · Framework lập trình LM mới, tự động tối ưu pipeline, thay đổi cách tiếp cận ứng dụng LM.
+
+2310.17157 – DEJAVU · Kỹ thuật contextual sparsity động giúp tăng tốc LLM inference đáng kể.
+
+2310.12773 – Safe RLHF · Phương pháp có nguyên tắc để xây dựng LLM vừa hữu ích vừa an toàn.
+
+2310.15008 – Wonder3D · Tạo 3D chất lượng cao từ ảnh đơn với kiến trúc diffusion đa miền sáng tạo.
+
+2310.03734 – ITIT · Huấn luyện VLM sinh trên dữ liệu không cặp đôi, tiềm năng lớn cho việc giảm chi phí dữ liệu.
+
+2310.18313 – FP8 Training · Khung FP8 mixed-precision toàn diện cho huấn luyện LLM hiệu quả.
+
+META_REFLECTION
+Tập hợp các bài báo tháng 10 năm 2023 cho thấy một số xu hướng phát triển AI nổi bật:
+
+Tối ưu hóa hiệu quả LLM: Một lượng lớn nghiên cứu tập trung vào việc làm cho LLM trở nên nhẹ hơn, nhanh hơn và tiết kiệm tài nguyên hơn thông qua các kỹ thuật lượng tử hóa (BitNet, FP8, LoftQ, QMoE, FPQ, TEQ, Atom), PEFT (VeRA, LoRAShear), và inference hiệu quả (DEJAVU, EFT). Điều này phản ánh nhu cầu cấp thiết về việc triển khai LLM trên các thiết bị hạn chế và giảm chi phí vận hành.
+
+Nâng cao khả năng Reasoning, Planning và Agent của LLM: Nhiều công trình khám phá cách cải thiện khả năng suy luận (LLEMMA, MathCodeInstruct, Analogical Prompting), lập kế hoạch (ITP, VLP, ToolChain*), và xây dựng các agent tự trị hơn (AgentTuning, Octopus, EUREKA, ControlLLM, MusicAgent, Idea2Img). Xu hướng này cho thấy tham vọng biến LLM thành những thực thể có khả năng hành động và giải quyết vấn đề phức tạp.
+
+Bùng nổ Generative AI đa phương thức, đặc biệt là 3D và Video: Các mô hình Diffusion tiếp tục thống trị lĩnh vực sinh ảnh, video và 3D, với nhiều cải tiến về chất lượng, khả năng điều khiển, và hiệu quả (PIXART-α, Kandinsky, MDM, RECAP, CommonCanvas, Wonder3D, DreamCraft3D, GaussianDreamer, VideoCrafter, MotionDirector). Sự quan tâm đến việc tạo nội dung 3D từ text hoặc ảnh đơn là rất lớn.
+
+Tăng cường tính tin cậy và an toàn của AI: Các vấn đề về hallucination (SELF-RAG, Woodpecker, HALLUSION BENCH), alignment (Safe RLHF, PIT, Tuna, length bias analysis), và phát hiện dữ liệu (WIKIMIA) được chú trọng, cho thấy sự trưởng thành của lĩnh vực khi tập trung vào việc xây dựng AI đáng tin cậy và có trách nhiệm.
+
+Data-Centric AI và tự cải thiện: Tầm quan trọng của dữ liệu chất lượng cao được nhấn mạnh qua các phương pháp tái chú thích (RECAP), tạo dữ liệu tổng hợp (CommonCanvas, S3, TeacherData-2M), và các framework tự cải thiện dựa trên dữ liệu (PIT, TRIPOST, CodeChain). DSPy (2310.03714) cũng cho thấy hướng tự động hóa việc tối ưu pipeline dựa trên dữ liệu.
+
+Hệ thống và Benchmark: Sự phát triển của các hệ thống phức tạp tích hợp nhiều module AI (MM-VID, ControlLLM, Loop Copilot) và các benchmark chuyên sâu (SmartPlay, ImagenHub, DEsignBench, HALLUSION BENCH, EvalCrafter, WIKIMIA, TIC-CLIP) cho thấy lĩnh vực đang hướng tới việc xây dựng các ứng dụng thực tế hơn và đánh giá AI một cách toàn diện hơn.
+
+Học hỏi từ dữ liệu không hoàn hảo/ít ỏi: Các kỹ thuật như tận dụng dữ liệu không cặp đôi (ITIT), zero-shot/few-shot learning (EUREKA, VLM-RM, CAML, SoM Prompting) và distillation (2310.13332) tiếp tục được khám phá để giảm sự phụ thuộc vào lượng lớn dữ liệu có nhãn hoàn hảo.
+
