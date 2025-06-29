@@ -4,55 +4,46 @@
 ```mermaid
 
 flowchart TD
-    %% ===== INPUT =========================================================
-    A([Audio stream\n30-s sliding window])
+    %% ========== INPUT ======================================================
+    A["Audio stream<br/>30-s window"]
 
-    %% ===== PRE-PROCESSING ================================================
-    subgraph PRE["Pre-processing"]
+    %% ========== PRE-PROCESSING ============================================
+    subgraph "Pre-processing"
         direction TB
-        B[VAD\nSilero]
-        C[[Audio segments]]
-        D[Language ID\nWhisper]
-        E[Alignment\n(per language)]
+        B["VAD<br/>Silero"]
+        C["Audio segments"]
+        D["Language ID<br/>Whisper"]
+        E["Alignment<br/>per language"]
     end
 
-    %% ===== ASR ENGINE =====================================================
-    subgraph ASR["ASR engine"]
-        F[Whisper v3 Turbo\n(faster-whisper fp16)]
+    %% ========== ASR ENGINE =================================================
+    subgraph "ASR engine"
+        F["Whisper v3 Turbo<br/>faster-whisper fp16"]
     end
 
-    %% ===== POST-PROCESSING ===============================================
-    subgraph POST["Post-processing"]
+    %% ========== POST-PROCESSING ===========================================
+    subgraph "Post-processing"
         direction TB
-        G[Stable-Prefix\n(Local Agreement + τ)]
-        R[Re-align text]
-        OUT(["Committed\n&\nUncommitted\ntext"])
+        G["Stable-Prefix<br/>LA-n + τ"]
+        R["Re-align text"]
+        OUT(["Committed<br/>Uncommitted<br/>text"])
     end
 
-    %% ===== SPEAKER-ID PATH ===============================================
-    subgraph SPK["Speaker ID"]
-        S[Speaker embedding\n(ECAPA / TDNN / ResNet293)]
+    %% ========== SPEAKER-ID PATH ===========================================
+    subgraph "Speaker ID"
+        S["Speaker embedding<br/>ECAPA / TDNN / ResNet293"]
     end
 
-    %% ===== MAIN FLOW ======================================================
+    %% ----------------- MAIN FLOW ------------------------------------------
     A --> B --> C --> D --> E --> F --> G --> R --> OUT
 
-    %% ===== SPEAKER FLOW ====================================================
+    %% ----------------- SPEAKER SIDE FLOW ----------------------------------
     C -. waveform .-> S
-    S -. "cosine sim > θ" .-> R
+    S -. "cos sim ≥ θ" .-> R
 
-    %% ===== STYLE ===========================================================
-    classDef input       fill:#FFFFFF,stroke:#333,stroke-width:2px;
-    classDef preprocessing fill:#FFF9E6,stroke:#333,stroke-width:1px;
-    classDef asr         fill:#E6F3FF,stroke:#333,stroke-width:1px;
-    classDef post        fill:#FDE6F2,stroke:#333,stroke-width:1px;
-    classDef speaker     fill:#EDEBFF,stroke:#333,stroke-width:1px;
-
-    class A input;
-    class B,C,D,E preprocessing;
-    class F asr;
-    class G,R,OUT post;
-    class S speaker;
+    %% ========== OPTIONAL STYLE (pastel boxes) =============================
+    classDef blk fill:#F6FBFF,stroke:#333,stroke-width:1px;
+    class A,B,C,D,E,F,G,R,S,OUT blk;
 
 
 ```
