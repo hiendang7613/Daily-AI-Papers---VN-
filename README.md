@@ -1,6 +1,7 @@
 # QuickNotebookAI
 # Daily-AI-Papers---VN-
 
+```mermaid
 
 flowchart LR
     %% ───── Input ──────────────────────────────────────────────────────────
