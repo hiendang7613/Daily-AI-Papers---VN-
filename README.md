@@ -3,61 +3,56 @@
 
 ```mermaid
 
+flowchart TD
+    %% ===== INPUT =========================================================
+    A([Audio stream\n30-s sliding window])
 
+    %% ===== PRE-PROCESSING ================================================
+    subgraph PRE["Pre-processing"]
+        direction TB
+        B[VAD\nSilero]
+        C[[Audio segments]]
+        D[Language ID\nWhisper]
+        E[Alignment\n(per language)]
+    end
 
-flowchart LR
-    %% ─── Nodes ─────────────────────────────────────────
-    A([Audio Streaming])
-    B[VAD<br/>Silero]
-    C[[Audio Segments]]
-    D[Language ID<br/>Whisper]
-    E[Per-language<br/>Alignment]
-    F[Whisper v3 Turbo<br/>faster-whisper fp16]
-    G[Stable-Prefix<br/>LA-n + τ]
-    S[Speaker Embedding<br/>ECAPA / TDNN / ResNet293]
-    R[Re-align Text]
-    OUT((Committed<br/>Uncommitted<br/>Text))
+    %% ===== ASR ENGINE =====================================================
+    subgraph ASR["ASR engine"]
+        F[Whisper v3 Turbo\n(faster-whisper fp16)]
+    end
 
-    %% ─── Main ASR path ────────────────────────────────
+    %% ===== POST-PROCESSING ===============================================
+    subgraph POST["Post-processing"]
+        direction TB
+        G[Stable-Prefix\n(Local Agreement + τ)]
+        R[Re-align text]
+        OUT(["Committed\n&\nUncommitted\ntext"])
+    end
+
+    %% ===== SPEAKER-ID PATH ===============================================
+    subgraph SPK["Speaker ID"]
+        S[Speaker embedding\n(ECAPA / TDNN / ResNet293)]
+    end
+
+    %% ===== MAIN FLOW ======================================================
     A --> B --> C --> D --> E --> F --> G --> R --> OUT
 
-    %% ─── Speaker-ID side path ─────────────────────────
-    C -. waveform .-> S -. cosine sim > θ .-> R
+    %% ===== SPEAKER FLOW ====================================================
+    C -. waveform .-> S
+    S -. "cosine sim > θ" .-> R
 
-    %% ─── Styling (optional) ───────────────────────────
-    classDef stage fill:#eaf8ff,stroke:#333;
-    class B,C,D,E,F,G,S,R stage;
-    style A fill:#f5fbff,stroke:#333;
-    style OUT fill:#fffadc,stroke:#333;
+    %% ===== STYLE ===========================================================
+    classDef input       fill:#FFFFFF,stroke:#333,stroke-width:2px;
+    classDef preprocessing fill:#FFF9E6,stroke:#333,stroke-width:1px;
+    classDef asr         fill:#E6F3FF,stroke:#333,stroke-width:1px;
+    classDef post        fill:#FDE6F2,stroke:#333,stroke-width:1px;
+    classDef speaker     fill:#EDEBFF,stroke:#333,stroke-width:1px;
 
-```
+    class A input;
+    class B,C,D,E preprocessing;
+    class F asr;
+    class G,R,OUT post;
+    class S speaker;
 
-```mermaid
-
-
-flowchart LR
-    %% ─── NODES ───────────────────────────────────────
-    A["Audio\nStreaming"]
-    B["Silero VAD\n(Voice Activity Detection)"]
-    C["Audio\nSegments"]
-    D["Whisper\nLanguage ID"]
-    E["Per-language\nAlignment"]
-    F["Whisper v3 Turbo\nfaster-whisper fp16"]
-    G["Stable-Prefix\nLA-n  +  τ"]
-    S["Speaker Embedding\nECAPA / TDNN / ResNet293"]
-    R["Re-align Text"]
-    OUT(["Committed\n&\nUncommitted\nText"])
-
-    %% ─── MAIN ASR PATH ───────────────────────────────
-    A --> B --> C --> D --> E --> F --> G --> R --> OUT
-
-    %% ─── SPEAKER-ID SIDE PATH ───────────────────────
-    C -. waveform .-> S -. "cosine sim > θ" .-> R
-
-    %% ─── STYLING (tuỳ chọn) ─────────────────────────
-    classDef stage fill:#E8F4FF,stroke:#333,stroke-width:1px;
-    class B,C,D,E,F,G,S,R stage;
-    style A fill:#F0FAFF,stroke:#333,stroke-width:1px;
-    style OUT fill:#FFF7C7,stroke:#333,stroke-width:2px;
 
 ```
