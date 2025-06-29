@@ -10,6 +10,7 @@ flowchart TD
     %% ========== PRE-PROCESSING ============================================
     subgraph "Pre-processing"
         direction TB
+        Z["Speech Separation<br/>Demus"]
         B["VAD<br/>Silero"]
         C["Audio segments"]
         D["Language ID<br/>Whisper"]
@@ -35,7 +36,7 @@ flowchart TD
     end
 
     %% ----------------- MAIN FLOW ------------------------------------------
-    A --> B --> C --> D --> E --> F --> G --> R --> OUT
+    A --> Z --> B --> C --> D --> E --> F --> G --> R --> OUT
 
     %% ----------------- SPEAKER SIDE FLOW ----------------------------------
     C -. waveform .-> S
