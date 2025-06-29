@@ -4,32 +4,30 @@
 ```mermaid
 
 
+
 flowchart LR
-    %% ─── Input ─────────────────────────────────────────────────────
-    subgraph LIVE_AUDIO["Audio Stream (30&nbsp;s context)"]
-        A[AUDIO<br/>Streaming]
-    end
+    %% ─── Nodes ─────────────────────────────────────────
+    A([Audio Streaming])
+    B[VAD<br/>Silero]
+    C[[Audio Segments]]
+    D[Language ID<br/>Whisper]
+    E[Per-language<br/>Alignment]
+    F[Whisper v3 Turbo<br/>faster-whisper fp16]
+    G[Stable-Prefix<br/>LA-n + τ]
+    S[Speaker Embedding<br/>ECAPA / TDNN / ResNet293]
+    R[Re-align Text]
+    OUT((Committed<br/>Uncommitted<br/>Text))
 
-    %% ─── Main ASR path ─────────────────────────────────────────────
-    A --> B[VAD<br/>Silero]
-    B --> C[[&lt;audio&nbsp;segments&gt;]]
+    %% ─── Main ASR path ────────────────────────────────
+    A --> B --> C --> D --> E --> F --> G --> R --> OUT
 
-    C --> D[Language&nbsp;ID<br/>Whisper]
-    D --> E[Per-language<br/>Alignment]
-    E --> F[Whisper&nbsp;v3&nbsp;Turbo<br/>(faster-whisper&nbsp;fp16)]
-    F --> G[Stable-Prefix<br/>LA-n&nbsp;+&nbsp;τ]
+    %% ─── Speaker-ID side path ─────────────────────────
+    C -. waveform .-> S -. cosine sim > θ .-> R
 
-    %% ─── Speaker-ID side path ─────────────────────────────────────
-    C -- waveform --> S[Speaker&nbsp;Embedding<br/>(ECAPA&nbsp;/&nbsp;TDNN&nbsp;/&nbsp;ResNet293)]
-    S -- cosine&nbsp;sim&nbsp;&gt;&nbsp;θ --> R[Re-align&nbsp;Text]
-
-    %% ─── Merge & output ────────────────────────────────────────────
-    G --> R
-    R --> OUT((COMMITTED<br/>UNCOMMITTED<br/>Text))
-
-    %% ─── Simple styling (optional) ────────────────────────────────
+    %% ─── Styling (optional) ───────────────────────────
     classDef stage fill:#eaf8ff,stroke:#333;
     class B,C,D,E,F,G,S,R stage;
     style A fill:#f5fbff,stroke:#333;
     style OUT fill:#fffadc,stroke:#333;
+
 
