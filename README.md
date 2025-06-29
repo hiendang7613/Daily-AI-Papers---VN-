@@ -31,3 +31,33 @@ flowchart LR
     style OUT fill:#fffadc,stroke:#333;
 
 
+
+```mermaid
+
+
+flowchart LR
+    %% ─── NODES ───────────────────────────────────────
+    A["Audio\nStreaming"]
+    B["Silero VAD\n(Voice Activity Detection)"]
+    C["Audio\nSegments"]
+    D["Whisper\nLanguage ID"]
+    E["Per-language\nAlignment"]
+    F["Whisper v3 Turbo\nfaster-whisper fp16"]
+    G["Stable-Prefix\nLA-n  +  τ"]
+    S["Speaker Embedding\nECAPA / TDNN / ResNet293"]
+    R["Re-align Text"]
+    OUT(["Committed\n&\nUncommitted\nText"])
+
+    %% ─── MAIN ASR PATH ───────────────────────────────
+    A --> B --> C --> D --> E --> F --> G --> R --> OUT
+
+    %% ─── SPEAKER-ID SIDE PATH ───────────────────────
+    C -. waveform .-> S -. "cosine sim > θ" .-> R
+
+    %% ─── STYLING (tuỳ chọn) ─────────────────────────
+    classDef stage fill:#E8F4FF,stroke:#333,stroke-width:1px;
+    class B,C,D,E,F,G,S,R stage;
+    style A fill:#F0FAFF,stroke:#333,stroke-width:1px;
+    style OUT fill:#FFF7C7,stroke:#333,stroke-width:2px;
+
+
