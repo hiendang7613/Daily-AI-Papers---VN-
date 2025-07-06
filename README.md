@@ -2,49 +2,39 @@
 # Daily-AI-Papers---VN-
 
 ```mermaid
+graph TD
+  %% ===== Backbone & feature pyramid =====
+  subgraph Backbone
+    A0["ResNet / Swin / ViT (+ FPN)"] -->|multi-scale {P3,P4,P5}| P5
+  end
 
-flowchart TD
-    %% ========== INPUT ======================================================
-    A["Audio stream<br/>30-s window"]
+  subgraph PixelDecoder["MaskDINOEncoder (Conv + FPN)"]
+    P5 --> PD
+  end
 
-    %% ========== PRE-PROCESSING ============================================
-    subgraph "Pre-processing"
-        direction TB
-        Z["Speech Separation<br/>Demus"]
-        B["VAD<br/>Silero"]
-        C["Audio segments"]
-        D["Language ID<br/>Whisper"]
-        E["Alignment<br/>per language"]
-    end
+  %% ===== Two-stage proposal =====
+  PD --> RP["Two-stage Proposal<br/>(300 anchors)"]
+  RP -->|top 100| Q0["Object Queries (100)"]
 
-    %% ========== ASR ENGINE =================================================
-    subgraph "ASR engine"
-        F["Whisper v3 Turbo<br/>faster-whisper fp16"]
-    end
+  %% ===== Transformer Decoder with MSDeformAttn x6 =====
+  subgraph Decoder["Transformer Decoder × 6 layers"]
+    Q0 -->|Self-Attn (MHA)| Q0
+    Q0 -- "Cross-Attn<br/>**MSDeformAttn**" --> PD
+    Q0 -->|FFN| Q0
+  end
 
-    %% ========== POST-PROCESSING ===========================================
-    subgraph "Post-processing"
-        direction TB
-        G["Stable-Prefix<br/>LA-n + τ"]
-        R["Re-align text"]
-        OUT(["Committed<br/>Uncommitted<br/>text"])
-    end
+  %% ===== Heads =====
+  Q0 --> CL["Class / Box"]
+  Q0 --> ME["Mask Embedding"]
+  PD --> ML["Mask Logits"]
+  ME --> ML
+  ML --> Mout["Instance / Semantic Masks"]
+  CL --> Bout["Boxes & Scores"]
 
-    %% ========== SPEAKER-ID PATH ===========================================
-    subgraph "Speaker ID"
-        S["Speaker embedding<br/>ECAPA / TDNN / ResNet293"]
-    end
-
-    %% ----------------- MAIN FLOW ------------------------------------------
-    A --> Z --> B --> C --> D --> E --> F --> G --> R --> OUT
-
-    %% ----------------- SPEAKER SIDE FLOW ----------------------------------
-    C -. waveform .-> S
-    S -. "cos sim ≥ θ" .-> R
-
-    %% ========== OPTIONAL STYLE (pastel boxes) =============================
-    classDef blk fill:#F6FBFF,stroke:#333,stroke-width:1px;
-    class A,B,C,D,E,F,G,R,S,OUT blk;
+  class PD,Mout,Bout stroke-width:2,stroke-dasharray: 3 3     %% highlight outputs
 
 
 ```
+
+
+
