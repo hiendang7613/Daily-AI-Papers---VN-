@@ -2,16 +2,15 @@
 # Daily-AI-Papers---VN-
 
 ```mermaid
-
 graph TD
   %% Backbone & FPN
   subgraph Backbone
     A0["ResNet / Swin / ViT (+ FPN)"] -->|"multi-scale P3-P5"| P5
   end
 
-  %% Pixel decoder (chỉ Conv + FPN)
-  subgraph PixelDecoder["MaskDINOEncoder (Conv + FPN)"]
-    P5 --> PD
+  %% Pixel decoder (Conv + FPN)
+  subgraph PixelDecoder
+    P5 --> PD["Pixel Decoder"]
   end
 
   %% Two-stage proposals
@@ -32,12 +31,5 @@ graph TD
   ME --> ML
   ML --> Mout["Instance & Semantic Masks"]
   CL --> Bout["Boxes & Scores"]
-
-  class PD,Mout,Bout stroke-width:2,stroke-dasharray:3 3
-
-```
-
-```
-
 
 
